@@ -11,6 +11,7 @@ import {
   HeartHandshake,
   Users,
   ArrowRight,
+  ArrowUpRight,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { Container } from "@/components/ui/container";
@@ -50,12 +51,16 @@ export function Categories() {
               <Reveal key={item.key} delay={i % 4} as="div">
                 <Link
                   href="/jobs"
-                  className="group flex h-full flex-col justify-between rounded-2xl border border-line bg-paper-2 p-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-line-2 hover:shadow-sm"
+                  className="group relative flex h-full flex-col justify-between overflow-hidden rounded-2xl border border-line bg-paper-2 p-5 transition-all duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-[0_14px_34px_-16px_rgba(79,70,229,0.4)]"
                 >
-                  <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-accent-soft text-accent">
+                  <span className="absolute inset-x-0 top-0 h-0.5 origin-left scale-x-0 bg-accent transition-transform duration-300 group-hover:scale-x-100" />
+                  <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-accent-soft text-accent transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:scale-105">
                     <Icon className="h-5 w-5" />
                   </span>
-                  <span className="mt-8 font-medium">{t(`items.${item.key}`)}</span>
+                  <span className="mt-8 flex items-center justify-between font-medium">
+                    {t(`items.${item.key}`)}
+                    <ArrowUpRight className="h-4 w-4 -translate-x-1 text-accent opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100" />
+                  </span>
                 </Link>
               </Reveal>
             );

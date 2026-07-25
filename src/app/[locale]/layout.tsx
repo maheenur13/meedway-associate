@@ -9,6 +9,7 @@ import { Footer } from "@/components/site/footer";
 import { WhatsappButton } from "@/components/site/whatsapp-button";
 import { AuroraBackground } from "@/components/site/aurora-background";
 import { ScrollProgress } from "@/components/site/scroll-progress";
+import { ThemeSync } from "@/components/site/theme-sync";
 import "../globals.css";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
@@ -59,6 +60,7 @@ export default async function LocaleLayout({
       </head>
       <body className="flex min-h-full flex-col bg-paper text-ink antialiased">
         <NextIntlClientProvider>
+          <ThemeSync />
           <AuroraBackground />
           <ScrollProgress />
           <Navbar />

@@ -1,4 +1,5 @@
 import { Reveal } from "./reveal";
+import { AccentDash } from "./accent-dash";
 import { cn } from "@/lib/utils";
 
 export function SectionHeader({
@@ -24,7 +25,13 @@ export function SectionHeader({
     >
       {eyebrow && (
         <Reveal>
-          <span className="text-xs font-medium uppercase tracking-[0.18em] text-accent">
+          <span
+            className={cn(
+              "inline-flex items-center gap-2.5 text-xs font-medium uppercase tracking-[0.18em] text-accent",
+              align === "center" && "justify-center"
+            )}
+          >
+            <AccentDash />
             {eyebrow}
           </span>
         </Reveal>

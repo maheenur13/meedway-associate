@@ -3,7 +3,6 @@
 import { useLocale } from "next-intl";
 import { usePathname, useRouter } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
-import { useParams } from "next/navigation";
 import { cn } from "@/lib/utils";
 
 const labels: Record<string, string> = { en: "EN", bn: "বাংলা" };
@@ -12,12 +11,10 @@ export function LocaleSwitcher({ className }: { className?: string }) {
   const locale = useLocale();
   const router = useRouter();
   const pathname = usePathname();
-  const params = useParams();
 
   function switchTo(next: string) {
     if (next === locale) return;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    router.replace({ pathname, params: params as any }, { locale: next });
+    router.replace(pathname, { locale: next });
   }
 
   return (

@@ -1,5 +1,6 @@
 import { setRequestLocale } from "next-intl/server";
 import { Hero } from "@/components/home/hero";
+import { TrustMarquee } from "@/components/home/trust-marquee";
 import { Intro } from "@/components/home/intro";
 import { Categories } from "@/components/home/categories";
 import { Process } from "@/components/home/process";
@@ -17,6 +18,7 @@ export default async function HomePage({
   return (
     <>
       <Hero />
+      <TrustMarquee />
       <Intro />
       <Categories />
       <Process />
