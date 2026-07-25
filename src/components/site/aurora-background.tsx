@@ -105,6 +105,9 @@ export function AuroraBackground() {
         ))}
       </div>
 
+      {/* soft paper wash to keep the blobs airy on the off-white */}
+      <div className="absolute inset-0 bg-paper/25" />
+
       {/* cursor-tracking light glow */}
       <div
         className="absolute inset-0"
@@ -114,17 +117,31 @@ export function AuroraBackground() {
         }}
       />
 
-      {/* faint dot-grid for structure, masked to fade at edges */}
+      {/* base line grid — faint structure, faded toward the edges */}
       <div
         className="absolute inset-0"
         style={{
           backgroundImage:
-            "radial-gradient(var(--grid-dot) 1px, transparent 1px)",
-          backgroundSize: "24px 24px",
+            "linear-gradient(to right, var(--grid-line) 1px, transparent 1px), linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px)",
+          backgroundSize: "46px 46px",
           maskImage:
-            "radial-gradient(ellipse 80% 60% at 50% 40%, #000 30%, transparent 78%)",
+            "radial-gradient(ellipse 85% 70% at 50% 35%, #000 25%, transparent 80%)",
           WebkitMaskImage:
-            "radial-gradient(ellipse 80% 60% at 50% 40%, #000 30%, transparent 78%)",
+            "radial-gradient(ellipse 85% 70% at 50% 35%, #000 25%, transparent 80%)",
+        }}
+      />
+
+      {/* spotlight grid — the same grid lights up brightly around the cursor */}
+      <div
+        className="absolute inset-0"
+        style={{
+          backgroundImage:
+            "linear-gradient(to right, var(--grid-line-strong) 1px, transparent 1px), linear-gradient(to bottom, var(--grid-line-strong) 1px, transparent 1px)",
+          backgroundSize: "46px 46px",
+          maskImage:
+            "radial-gradient(240px circle at var(--cx) var(--cy), #000 0%, transparent 65%)",
+          WebkitMaskImage:
+            "radial-gradient(240px circle at var(--cx) var(--cy), #000 0%, transparent 65%)",
         }}
       />
 
@@ -138,9 +155,6 @@ export function AuroraBackground() {
           mixBlendMode: "overlay",
         }}
       />
-
-      {/* soft wash to keep it airy on the off-white paper */}
-      <div className="absolute inset-0 bg-paper/25" />
     </div>
   );
 }

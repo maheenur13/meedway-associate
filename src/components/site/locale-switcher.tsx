@@ -33,7 +33,7 @@ export function LocaleSwitcher({ className }: { className?: string }) {
           onClick={() => switchTo(l)}
           className={cn(
             "rounded-full px-2.5 py-1 transition-colors",
-            l === locale ? "bg-ink text-white" : "text-ink-soft hover:text-ink"
+            l === locale ? "bg-ink text-paper" : "text-ink-soft hover:text-ink"
           )}
           aria-current={l === locale}
         >
