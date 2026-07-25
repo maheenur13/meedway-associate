@@ -1,0 +1,99 @@
+{
+  "brand": {
+    "name": "Meed Associates",
+    "full": "Meed Associates Ltd.",
+    "tagline": "Overseas Recruitment"
+  },
+  "nav": {
+    "home": "Home",
+    "jobs": "Jobs",
+    "employers": "Employers",
+    "services": "Services",
+    "about": "About",
+    "contact": "Contact",
+    "applyNow": "Apply now",
+    "requestWorkers": "Request workers"
+  },
+  "hero": {
+    "badge": "BAIRA member · Licence RL-2927",
+    "titleA": "Skilled workers,",
+    "titleB": "placed",
+    "titleAccent": "worldwide.",
+    "subtitle": "The overseas recruitment partner for companies hiring construction, factory, hospitality, and technical workers — sourced, screened, and deployed.",
+    "ctaJobs": "View available jobs",
+    "ctaRequest": "Request workers"
+  },
+  "stats": {
+    "placed": "Workers placed",
+    "countries": "Countries served",
+    "deployed": "Deployment rate"
+  },
+  "intro": {
+    "eyebrow": "Who we are",
+    "title": "A recruitment partner built on trust and results.",
+    "body": "We connect qualified workers with international employers and help companies recruit the right people for their business — handling everything from sourcing and screening to visa processing and deployment."
+  },
+  "categories": {
+    "eyebrow": "What we provide",
+    "title": "Workers across every trade.",
+    "subtitle": "Skilled, semi-skilled, and general workers ready for overseas deployment.",
+    "viewAll": "View all categories",
+    "items": {
+      "construction": "Construction",
+      "factory": "Factory",
+      "drivers": "Drivers",
+      "cleaners": "Cleaners",
+      "hospitality": "Hotel & restaurant",
+      "electricians": "Electricians",
+      "plumbers": "Plumbers",
+      "welders": "Welders",
+      "caregivers": "Caregivers",
+      "general": "General workers"
+    }
+  },
+  "process": {
+    "eyebrow": "How it works",
+    "title": "A simple, transparent process.",
+    "steps": {
+      "one": { "title": "Register", "body": "Workers register and submit their CV; employers share their requirements." },
+      "two": { "title": "Screen & test", "body": "We screen candidates, verify documents, and arrange skills or trade testing." },
+      "three": { "title": "Interview", "body": "We coordinate interviews between employers and shortlisted candidates." },
+      "four": { "title": "Deploy", "body": "Visa processing, orientation, and travel — we handle deployment end to end." }
+    }
+  },
+  "why": {
+    "eyebrow": "Why Meedway",
+    "title": "Why companies and workers choose us.",
+    "items": {
+      "one": { "title": "Licensed & compliant", "body": "A registered recruitment agency operating under a valid recruiting licence." },
+      "two": { "title": "Transparent process", "body": "Clear steps and honest communication at every stage — no hidden surprises." },
+      "three": { "title": "Worker safety first", "body": "We prioritise the wellbeing and fair treatment of every worker we deploy." },
+      "four": { "title": "Fast deployment", "body": "Streamlined screening and documentation to get workers on-site sooner." }
+    }
+  },
+  "cta": {
+    "title": "Ready to hire skilled workers or find work abroad?",
+    "body": "Tell us what you need and our team will get back to you quickly.",
+    "employers": "Request workers",
+    "seekers": "Apply for a job",
+    "whatsapp": "Chat on WhatsApp"
+  },
+  "footer": {
+    "tagline": "Reliable overseas recruitment and workforce solutions.",
+    "explore": "Explore",
+    "company": "Company",
+    "contact": "Contact",
+    "licence": "Recruiting Licence No.",
+    "rights": "All rights reserved."
+  },
+  "notFound": {
+    "title": "Page not found",
+    "body": "The page you're looking for doesn't exist or has moved.",
+    "cta": "Back to home"
+  },
+  "common": {
+    "apply": "Apply",
+    "learnMore": "Learn more",
+    "vacancies": "vacancies"
+  }
+}

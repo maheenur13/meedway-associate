@@ -1,26 +1,161 @@
 @import "tailwindcss";
 
+/* ── Meed premium-minimal theme (mono + one accent) ──────────────── */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --paper: #fafaf7;      /* page background */
+  --paper-2: #ffffff;    /* raised surfaces */
+  --ink: #0a0a0a;        /* near-black text / primary */
+  --ink-soft: #5a5a5a;   /* secondary text */
+  --ink-mute: #8a8a8a;   /* muted text */
+  --line: #ececec;       /* hairline borders */
+  --line-2: #dcdcd8;     /* stronger borders */
+  --accent: #4f46e5;     /* electric indigo */
+  --accent-ink: #ffffff; /* text on accent */
+  --accent-soft: #eef0fe;/* accent tint bg */
+  --panel: #0a0a0a;      /* always-dark band (footer, CTA) */
+  --panel-2: #16181d;    /* raised surface on panel */
+  --panel-ink: #ffffff;  /* text on panel */
+  --grid-line: rgba(79, 70, 229, 0.07);        /* faint base grid */
+  --grid-line-strong: rgba(79, 70, 229, 0.28); /* lit around cursor */
+  --radius: 12px;
+}
+
+:root.dark {
+  --paper: #0b0d10;
+  --paper-2: #14171c;
+  --ink: #f3f4f6;
+  --ink-soft: #b4b9c2;
+  --ink-mute: #7e838d;
+  --line: rgba(255, 255, 255, 0.09);
+  --line-2: rgba(255, 255, 255, 0.16);
+  --accent: #818cf8;     /* lighter indigo reads better on dark */
+  --accent-ink: #0b0d10;
+  --accent-soft: rgba(129, 140, 248, 0.15);
+  --panel: #0f1115;
+  --panel-2: #191c22;
+  --panel-ink: #f3f4f6;
+  --grid-line: rgba(129, 140, 248, 0.08);
+  --grid-line-strong: rgba(129, 140, 248, 0.34);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-paper: var(--paper);
+  --color-paper-2: var(--paper-2);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-ink-mute: var(--ink-mute);
+  --color-line: var(--line);
+  --color-line-2: var(--line-2);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-accent-soft: var(--accent-soft);
+  --color-panel: var(--panel);
+  --color-panel-2: var(--panel-2);
+  --color-panel-ink: var(--panel-ink);
+
+  --font-sans: var(--font-inter);
+  --font-display: var(--font-sora);
+  --font-bengali: var(--font-bengali);
+
+  --radius-sm: 8px;
+  --radius: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 22px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  border-color: var(--line);
+}
+
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+:root {
+  color-scheme: light;
+}
+:root.dark {
+  color-scheme: dark;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-inter), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Bengali locale swaps the primary font stack */
+html[lang="bn"] body {
+  font-family: var(--font-bengali), var(--font-inter), system-ui, sans-serif;
+}
+
+.font-display {
+  font-family: var(--font-sora), var(--font-inter), sans-serif;
+  letter-spacing: -0.02em;
+}
+
+.tracking-tighter-2 {
+  letter-spacing: -0.045em;
+}
+
+::selection {
+  background: var(--accent);
+  color: #fff;
+}
+
+/* ── Aurora gradient-mesh background ──────────────────────────────── */
+@keyframes aurora-a {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(8%, 6%) scale(1.18);
+  }
+}
+@keyframes aurora-b {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1.1);
+  }
+  50% {
+    transform: translate(-7%, 5%) scale(0.92);
+  }
+}
+@keyframes aurora-c {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(5%, -8%) scale(1.12);
+  }
+}
+.aurora-blob {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(90px);
+  will-change: transform;
+}
+@keyframes aurora-hue {
+  0%,
+  100% {
+    filter: hue-rotate(-12deg) saturate(1);
+  }
+  50% {
+    filter: hue-rotate(16deg) saturate(1.15);
+  }
+}
+.aurora-hue {
+  animation: aurora-hue 20s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .aurora-blob,
+  .aurora-hue {
+    animation: none !important;
+  }
 }
