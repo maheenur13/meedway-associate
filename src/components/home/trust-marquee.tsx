@@ -31,7 +31,7 @@ export function TrustMarquee() {
               key={i}
               className="flex shrink-0 items-center gap-2.5 text-sm font-medium text-ink-soft"
             >
-              <BadgeCheck className="h-4 w-4 text-accent" />
+              <BadgeCheck className="h-4 w-4 text-gold" />
               {label}
             </li>
           ))}

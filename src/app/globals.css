@@ -9,14 +9,16 @@
   --ink-mute: #8a8a8a;   /* muted text */
   --line: #ececec;       /* hairline borders */
   --line-2: #dcdcd8;     /* stronger borders */
-  --accent: #4f46e5;     /* electric indigo */
+  --accent: #1d4ed8;     /* royal blue (brand) */
   --accent-ink: #ffffff; /* text on accent */
-  --accent-soft: #eef0fe;/* accent tint bg */
-  --panel: #0a0a0a;      /* always-dark band (footer, CTA) */
-  --panel-2: #16181d;    /* raised surface on panel */
+  --accent-soft: #e7edfd;/* accent tint bg */
+  --gold: #c9a227;       /* brand gold (secondary accent) */
+  --gold-soft: #f7efd6;  /* gold tint bg */
+  --panel: #0a1226;      /* always-dark band — deep navy (footer, CTA) */
+  --panel-2: #131c33;    /* raised surface on panel */
   --panel-ink: #ffffff;  /* text on panel */
-  --grid-line: rgba(79, 70, 229, 0.07);        /* faint base grid */
-  --grid-line-strong: rgba(79, 70, 229, 0.28); /* lit around cursor */
+  --grid-line: rgba(29, 78, 216, 0.07);        /* faint base grid */
+  --grid-line-strong: rgba(29, 78, 216, 0.26); /* lit around cursor */
   --radius: 12px;
 }
 
@@ -28,14 +30,16 @@
   --ink-mute: #7e838d;
   --line: rgba(255, 255, 255, 0.09);
   --line-2: rgba(255, 255, 255, 0.16);
-  --accent: #818cf8;     /* lighter indigo reads better on dark */
+  --accent: #60a5fa;     /* lighter royal blue reads better on dark */
   --accent-ink: #0b0d10;
-  --accent-soft: rgba(129, 140, 248, 0.15);
-  --panel: #0f1115;
-  --panel-2: #191c22;
+  --accent-soft: rgba(96, 165, 250, 0.15);
+  --gold: #e3c15a;       /* brighter gold on dark */
+  --gold-soft: rgba(227, 193, 90, 0.14);
+  --panel: #070c18;
+  --panel-2: #121a2e;
   --panel-ink: #f3f4f6;
-  --grid-line: rgba(129, 140, 248, 0.08);
-  --grid-line-strong: rgba(129, 140, 248, 0.34);
+  --grid-line: rgba(96, 165, 250, 0.08);
+  --grid-line-strong: rgba(96, 165, 250, 0.32);
 }
 
 @theme inline {
@@ -49,6 +53,8 @@
   --color-accent: var(--accent);
   --color-accent-ink: var(--accent-ink);
   --color-accent-soft: var(--accent-soft);
+  --color-gold: var(--gold);
+  --color-gold-soft: var(--gold-soft);
   --color-panel: var(--panel);
   --color-panel-2: var(--panel-2);
   --color-panel-ink: var(--panel-ink);
@@ -177,6 +183,25 @@ html[lang="bn"] body {
 }
 @media (prefers-reduced-motion: reduce) {
   .animate-marquee {
+    animation: none !important;
+  }
+}
+
+/* ── Gentle float (for the floating badge card) ───────────────────── */
+@keyframes floaty {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-7px);
+  }
+}
+.animate-floaty {
+  animation: floaty 5s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-floaty {
     animation: none !important;
   }
 }

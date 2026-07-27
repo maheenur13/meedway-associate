@@ -4,9 +4,9 @@
  * These will eventually be driven from the DB/CMS (CompanyProfile).
  */
 export const siteConfig = {
-  name: "Meed Associates Ltd.",
-  short: "Meed Associates",
-  logoMark: "Meed",
+  name: "Meed Associate Ltd.",
+  short: "Meed Associate",
+  logoMark: "MA",
   yearEstablished: null as number | null, // TODO: confirm year of establishment
   licenceNo: "RL-2927",
   baira: true,

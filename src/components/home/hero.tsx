@@ -28,7 +28,7 @@ export function Hero() {
         <div className="max-w-3xl">
           <Reveal>
             <span className="inline-flex items-center gap-2 rounded-full border border-line-2 bg-paper-2 px-3 py-1.5 text-xs text-ink-soft">
-              <span className="h-1.5 w-1.5 rounded-full bg-accent" />
+              <span className="h-1.5 w-1.5 rounded-full bg-gold" />
               {t("badge")}
             </span>
           </Reveal>
@@ -65,7 +65,7 @@ export function Hero() {
             const Icon = stat.icon;
             return (
               <Reveal key={stat.label} delay={4 + i} as="div">
-                <div className="group relative overflow-hidden rounded-2xl border border-line-2 bg-paper-2/55 p-5 backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:bg-paper-2/75 hover:shadow-[0_12px_40px_-12px_rgba(79,70,229,0.35)]">
+                <div className="group relative overflow-hidden rounded-2xl border border-line-2 bg-paper-2/55 p-5 backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:bg-paper-2/75 hover:shadow-[0_12px_40px_-12px_rgba(29,78,216,0.35)]">
                   {/* accent sheen that sweeps on hover */}
                   <div
                     aria-hidden
@@ -75,7 +75,7 @@ export function Hero() {
                     <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-accent-soft text-accent">
                       <Icon className="h-5 w-5" />
                     </span>
-                    <span className="h-1.5 w-1.5 rounded-full bg-accent/60 transition-transform duration-300 group-hover:scale-150" />
+                    <span className="h-1.5 w-1.5 rounded-full bg-gold transition-transform duration-300 group-hover:scale-150" />
                   </div>
                   <dd className="font-display mt-4 text-4xl font-semibold tracking-tighter-2">
                     <CountUp value={stat.value} suffix={stat.suffix} />

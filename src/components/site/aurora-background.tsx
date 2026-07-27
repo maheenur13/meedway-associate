@@ -64,10 +64,10 @@ export function AuroraBackground() {
   }, []);
 
   const blobs = [
-    { color: "rgba(99, 102, 241, 0.42)", size: "46vw", top: "-8%", left: "-6%", anim: "aurora-a 22s ease-in-out infinite", strength: 34, scroll: 0.12 },
-    { color: "rgba(139, 92, 246, 0.36)", size: "42vw", top: "6%", left: "58%", anim: "aurora-b 26s ease-in-out infinite", strength: -46, scroll: 0.24 },
-    { color: "rgba(96, 165, 250, 0.30)", size: "40vw", top: "48%", left: "18%", anim: "aurora-c 30s ease-in-out infinite", strength: 26, scroll: -0.16 },
-    { color: "rgba(129, 140, 248, 0.26)", size: "34vw", top: "40%", left: "66%", anim: "aurora-a 28s ease-in-out infinite", strength: -30, scroll: 0.3 },
+    { color: "rgba(29, 78, 216, 0.40)", size: "46vw", top: "-8%", left: "-6%", anim: "aurora-a 22s ease-in-out infinite", strength: 34, scroll: 0.12 },
+    { color: "rgba(37, 99, 235, 0.34)", size: "42vw", top: "6%", left: "58%", anim: "aurora-b 26s ease-in-out infinite", strength: -46, scroll: 0.24 },
+    { color: "rgba(201, 162, 39, 0.20)", size: "38vw", top: "48%", left: "18%", anim: "aurora-c 30s ease-in-out infinite", strength: 26, scroll: -0.16 },
+    { color: "rgba(96, 165, 250, 0.28)", size: "34vw", top: "40%", left: "66%", anim: "aurora-a 28s ease-in-out infinite", strength: -30, scroll: 0.3 },
   ];
 
   const grain =
@@ -113,7 +113,7 @@ export function AuroraBackground() {
         className="absolute inset-0"
         style={{
           background:
-            "radial-gradient(340px circle at var(--cx) var(--cy), rgba(99,102,241,0.16), transparent 70%)",
+            "radial-gradient(340px circle at var(--cx) var(--cy), rgba(37,99,235,0.16), transparent 70%)",
         }}
       />
 

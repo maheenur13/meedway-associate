@@ -70,7 +70,7 @@ export function Navbar() {
         <div className="flex h-16 items-center justify-between">
           <Logo />
 
-          <nav className="hidden items-center gap-1 md:flex">
+          <nav className="hidden items-center gap-1 lg:flex">
             {links.map((l) => (
               <Link
                 key={l.href}
@@ -82,7 +82,7 @@ export function Navbar() {
             ))}
           </nav>
 
-          <div className="hidden items-center gap-2 md:flex">
+          <div className="hidden items-center gap-2 lg:flex">
             <ThemeToggle />
             <LocaleSwitcher />
             <Button href="/jobs" variant="dark" size="sm">
@@ -90,7 +90,7 @@ export function Navbar() {
             </Button>
           </div>
 
-          <div className="flex items-center gap-2 md:hidden">
+          <div className="flex items-center gap-2 lg:hidden">
             <ThemeToggle />
             <button
               className="inline-flex h-10 w-10 items-center justify-center rounded-lg text-ink"
@@ -111,7 +111,7 @@ export function Navbar() {
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="overflow-hidden border-t border-line bg-paper/95 backdrop-blur-md md:hidden"
+            className="overflow-hidden border-t border-line bg-paper/95 backdrop-blur-md lg:hidden"
           >
             <Container>
               <nav className="flex flex-col py-3">

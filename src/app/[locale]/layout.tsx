@@ -22,11 +22,11 @@ const bengali = Noto_Sans_Bengali({
 
 export const metadata: Metadata = {
   title: {
-    default: "Meed Associates Ltd. — Overseas Recruitment Agency",
-    template: "%s — Meed Associates Ltd.",
+    default: "Meed Associate Ltd. — Overseas Recruitment Agency",
+    template: "%s — Meed Associate Ltd.",
   },
   description:
-    "Meed Associates Ltd. is a Bangladesh-based, BAIRA-member overseas recruitment agency (Licence RL-2927) supplying skilled, semi-skilled, and general workers to employers in Malaysia, Saudi Arabia, and the Gulf.",
+    "Meed Associate Ltd. is a Bangladesh-based, BAIRA-member overseas recruitment agency (Licence RL-2927) supplying skilled, semi-skilled, and general workers to employers in Malaysia, Saudi Arabia, and the Gulf.",
 };
 
 export function generateStaticParams() {
