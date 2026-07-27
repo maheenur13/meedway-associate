@@ -71,6 +71,191 @@
       "four": { "title": "Fast deployment", "body": "Streamlined screening and documentation to get workers on-site sooner." }
     }
   },
+  "about": {
+    "eyebrow": "About us",
+    "title": "A trusted overseas recruitment partner from Bangladesh.",
+    "intro": "Meed Associate Ltd. is a BAIRA-member recruitment agency operating under Recruiting Licence RL-2927. We help qualified workers find overseas employment and help international employers recruit reliable, suitable workers — handled end to end from our office in Banani, Dhaka.",
+    "facts": {
+      "licence": "Recruiting Licence",
+      "member": "Association",
+      "office": "Head Office",
+      "markets": "Markets served"
+    },
+    "membership": "BAIRA Member",
+    "officeLocation": "Banani, Dhaka",
+    "marketsValue": "8 countries",
+    "mission": {
+      "title": "Our mission",
+      "body": "To provide reliable, transparent, and responsible recruitment services for workers and international employers alike."
+    },
+    "vision": {
+      "title": "Our vision",
+      "body": "To become a trusted workforce recruitment partner in the international employment market."
+    },
+    "values": {
+      "eyebrow": "What we stand for",
+      "title": "Our values",
+      "items": {
+        "honesty": { "title": "Honesty", "body": "Straightforward dealings with workers and employers at every step." },
+        "transparency": { "title": "Transparency", "body": "Clear processes and costs — no hidden surprises." },
+        "professional": { "title": "Professional service", "body": "Trained staff and organised, efficient handling of every file." },
+        "safety": { "title": "Worker safety", "body": "The wellbeing and fair treatment of every worker we deploy comes first." },
+        "satisfaction": { "title": "Employer satisfaction", "body": "The right workers, matched to each employer's real requirements." }
+      }
+    },
+    "leadership": {
+      "eyebrow": "Leadership",
+      "title": "Guided by experience",
+      "role": "Managing Director",
+      "quote": "Our commitment is simple — treat every worker with respect and deliver every employer the right people. That trust is what we have built Meed Associate on."
+    },
+    "office": {
+      "eyebrow": "Our office",
+      "title": "Where it all happens",
+      "body": "Our Banani office houses reception, processing, a candidate waiting area, and interview rooms — a professional environment for workers and visiting employers."
+    }
+  },
+  "services": {
+    "eyebrow": "What we do",
+    "title": "End-to-end recruitment services",
+    "intro": "From first registration to safe arrival abroad, and from worker sourcing to post-deployment support — we handle the full journey for both job seekers and employers.",
+    "seekers": {
+      "eyebrow": "For job seekers",
+      "title": "Your path to overseas work",
+      "items": {
+        "info": "Overseas job information",
+        "registration": "Candidate registration",
+        "cv": "CV collection",
+        "interview": "Interview preparation",
+        "skills": "Skills assessment",
+        "documents": "Document assistance",
+        "medical": "Medical test guidance",
+        "visa": "Visa processing assistance",
+        "orientation": "Pre-departure orientation",
+        "travel": "Travel coordination"
+      }
+    },
+    "employers": {
+      "eyebrow": "For employers",
+      "title": "Reliable workforce sourcing",
+      "items": {
+        "sourcing": "Worker sourcing",
+        "screening": "Candidate screening",
+        "interview": "Interview arrangement",
+        "testing": "Skills and trade testing",
+        "verification": "Document verification",
+        "visa": "Visa documentation support",
+        "deployment": "Worker deployment",
+        "communication": "Post-deployment communication"
+      }
+    },
+    "industries": {
+      "eyebrow": "Industries we serve",
+      "title": "Workers for every sector",
+      "items": {
+        "construction": "Construction",
+        "manufacturing": "Manufacturing",
+        "hospitality": "Hospitality",
+        "cleaning": "Cleaning services",
+        "transportation": "Transportation",
+        "agriculture": "Agriculture",
+        "healthcare": "Healthcare support",
+        "engineering": "Engineering",
+        "general": "General workforce"
+      }
+    }
+  },
+  "jobs": {
+    "eyebrow": "Available jobs",
+    "title": "Current overseas opportunities",
+    "intro": "Live openings across the Gulf and Asia. Filter by country or category, then apply in minutes.",
+    "filterCountry": "Country",
+    "filterCategory": "Category",
+    "all": "All",
+    "vacancies": "Vacancies",
+    "salary": "Salary",
+    "hours": "Working hours",
+    "contract": "Contract",
+    "experience": "Experience",
+    "accommodation": "Accommodation",
+    "provided": "Provided",
+    "deadline": "Apply by",
+    "documents": "Required documents",
+    "apply": "Apply now",
+    "noResults": "No jobs match your filters.",
+    "resultsCount": "{count} openings"
+  },
+  "apply": {
+    "eyebrow": "Job application",
+    "title": "Apply for a job",
+    "intro": "Fill in your details and upload your CV. Our team will review and contact you.",
+    "submit": "Submit application",
+    "success": "Application received! Our team will contact you soon.",
+    "error": "Something went wrong. Please try again.",
+    "cvHint": "PDF or image, up to 5 MB",
+    "fields": {
+      "fullName": "Full name",
+      "phone": "Phone number",
+      "whatsapp": "WhatsApp number",
+      "email": "Email",
+      "position": "Job position",
+      "country": "Preferred country",
+      "experience": "Years of experience",
+      "address": "Current address",
+      "cv": "Upload CV",
+      "message": "Message"
+    }
+  },
+  "contact": {
+    "eyebrow": "Contact",
+    "title": "Get in touch",
+    "intro": "Questions about jobs or hiring workers? Reach us any way you like — or send a message below.",
+    "info": "Contact details",
+    "address": "Office",
+    "phone": "Phone",
+    "email": "Email",
+    "whatsapp": "WhatsApp",
+    "hours": "Office hours",
+    "hoursValue": "Sun – Thu, 10am – 6pm",
+    "formTitle": "Send us a message",
+    "talk": "Prefer to talk?",
+    "chat": "Chat on WhatsApp",
+    "orForm": "or fill in the form",
+    "submit": "Send message",
+    "success": "Message sent! We'll get back to you soon.",
+    "error": "Something went wrong. Please try again.",
+    "fields": {
+      "name": "Full name",
+      "email": "Email",
+      "phone": "Phone",
+      "subject": "Subject",
+      "message": "Message"
+    }
+  },
+  "requestWorkers": {
+    "eyebrow": "For employers",
+    "title": "Request workers",
+    "intro": "Tell us what you need and our team will prepare a suitable pool of candidates.",
+    "submit": "Submit request",
+    "success": "Request received! Our team will contact you shortly.",
+    "error": "Something went wrong. Please try again.",
+    "fields": {
+      "company": "Company name",
+      "contact": "Contact person",
+      "email": "Email",
+      "phone": "Phone / WhatsApp",
+      "country": "Country",
+      "category": "Worker category",
+      "quantity": "Number of workers",
+      "message": "Message / requirements"
+    }
+  },
+  "form": {
+    "required": "This field is required",
+    "invalidEmail": "Enter a valid email",
+    "sending": "Sending…",
+    "selectOption": "Select an option"
+  },
   "cta": {
     "title": "Ready to hire skilled workers or find work abroad?",
     "body": "Tell us what you need and our team will get back to you quickly.",
@@ -85,6 +270,13 @@
     "contact": "Contact",
     "licence": "Recruiting Licence No.",
     "rights": "All rights reserved."
+  },
+  "reach": {
+    "eyebrow": "Our global reach",
+    "title": "Workers deployed across the Gulf and Asia",
+    "subtitle": "Meed Associate supplies skilled and general workers to employers throughout these markets.",
+    "workers": "workers",
+    "hq": "Head Office · Dhaka"
   },
   "trust": {
     "baira": "BAIRA Member",

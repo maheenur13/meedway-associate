@@ -173,15 +173,24 @@ for collages. Serves quality 90 (see gotcha #5).
 animated hamburger, real company details + blue/gold rebrand, favicon/logo,
 office photos wired into the animated collage, localized 404s.
 
-**NOT STARTED — Phase 2+:**
+**Phase 2 — public pages DONE (bilingual):** About (`[locale]/about`), Services
+(`[locale]/services`), Available Jobs (`[locale]/jobs` — filters + cards from
+`lib/jobs-data.ts` seed), Apply (`[locale]/jobs/apply` — CV upload + position
+pre-fill via query), Contact (`[locale]/contact`), Request Workers
+(`[locale]/request-workers`). Forms use react-hook-form + zod (schema built in
+component with `useTranslations` for bilingual errors), submit to API routes
+`app/api/{contact,worker-requests,applications}/route.ts` which validate + ack
+(NO persistence yet — TODO Prisma + Cloudinary). Shared: `ui/page-hero.tsx`,
+`ui/form.tsx` (Field + fieldClass), `components/forms/*`, `components/jobs/jobs-browser.tsx`.
+NOTE: forms only capture values from REAL keyboard input (RHF ignores programmatic
+`.value`/`form_input`) — verify form flows with the `computer` type action, not JS.
+
+**NOT STARTED — rest of Phase 2+ (needs Neon + Cloudinary creds):**
 1. **Prisma schema + Neon** — models: `User`(admin), `Job`, `Application`,
    `WorkerRequest`, `CompanyProfile`/content, `WorkerCategory`, `Industry`,
-   `Country`, `MediaAsset` (see `docs/REQUIREMENTS.md` §6).
-2. **Public pages:** About (office/team/MD + licence + BAIRA + map), Services
-   (job-seeker + employer services, industries), Available Jobs (cards + filters),
-   Contact, Request Workers.
-3. **Forms → DB + Cloudinary** (application w/ CV upload, worker request, contact).
-4. **Admin portal:** Auth.js login + dashboard — job CRUD, view applications
+   `Country`, `MediaAsset` (see `docs/REQUIREMENTS.md` §6). Then wire the 3 API
+   routes to persist + upload CVs to Cloudinary.
+2. **Admin portal:** Auth.js login + dashboard — job CRUD, view applications
    (download CV) + worker requests, full bilingual content CMS + media management.
 
 **Pending credentials (needed for Phase 2 DB/upload work):** Neon connection

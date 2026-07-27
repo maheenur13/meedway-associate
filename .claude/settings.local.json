@@ -3,7 +3,8 @@
     "allow": [
       "mcp__visualize__show_widget",
       "Bash(cd \"C:\\\\Users\\\\jahid\\\\Desktop\\\\meedway-overseas\" && rm -f src/app/page.tsx && mkdir -p \"src/app/[locale]\" && echo done)",
-      "Bash(npm view *)"
+      "Bash(npm view *)",
+      "WebSearch"
     ]
   }
 }
