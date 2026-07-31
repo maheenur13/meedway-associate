@@ -187,11 +187,16 @@ NOTE: forms only capture values from REAL keyboard input (RHF ignores programmat
 
 **Phase 2 — ADMIN + DB DONE (local dev):**
 - **Prisma 7** (new `prisma-client` generator → `src/generated/prisma`, config in
-  `prisma.config.ts`). Dev DB = **SQLite via libsql driver adapter** (`PrismaLibSql`
-  from `@prisma/adapter-libsql`; Prisma 7 REQUIRES a driver adapter — no bare
-  `new PrismaClient()`). Client singleton: `src/lib/prisma.ts`. Models: User, Job,
-  Application, WorkerRequest, ContactMessage, SiteContent. Seed: `prisma/seed.ts`
-  (`pnpm exec tsx prisma/seed.ts`) → admin user + jobs.
+  `prisma.config.ts`). DB = **Neon Postgres via the pg driver adapter** (`PrismaPg`
+  from `@prisma/adapter-pg` + `pg`; Prisma 7 REQUIRES a driver adapter — no bare
+  `new PrismaClient()`). The `datasource` block has NO `url` — the URL comes from
+  `prisma.config.ts` (CLI) and `src/lib/prisma.ts` (runtime), both off `DATABASE_URL`.
+  Client singleton: `src/lib/prisma.ts`. Models: User, Job, Application,
+  WorkerRequest, ContactMessage, SiteContent. Seed: `pnpm db:seed` → admin user + jobs.
+- **`src/generated/prisma` is gitignored**, so `prisma generate` MUST run on every
+  install/build — wired as `postinstall` + prefixed onto `build` in package.json.
+  Without it, Turbopack fails with `Can't resolve '@/generated/prisma/client'`.
+  Scripts: `db:migrate` (dev), `db:deploy` (CI/prod), `db:seed`, `db:studio`.
 - **Auth.js v5** (`src/lib/auth.ts`, credentials + bcrypt, JWT). Admin at `/admin`
   (outside `[locale]`, own html/body). Guard: `auth()` check in
   `app/admin/(panel)/layout.tsx`; login at `/admin/login`.
@@ -213,20 +218,22 @@ NOTE: forms only capture values from REAL keyboard input (RHF ignores programmat
   to DB (verified). CVs saved to `public/uploads/cv/` in dev (TODO: Cloudinary).
   Public `/jobs` reads published jobs from DB.
 
-**Env:** `.env.local` (READ-LOCKED — can't be edited by tools) has
-`DATABASE_URL="file:./prisma/dev.db"` + `AUTH_SECRET`. `prisma.config.ts` only uses
-`DATABASE_URL` when it starts with `postgres`, else forces the sqlite path.
+**Env:** `.env` / `.env.local` (READ-LOCKED — tools cannot open them) hold
+`DATABASE_URL` (Neon **pooled** `-pooler` string) + `AUTH_SECRET`. Optional
+`DIRECT_URL` = the same string with `-pooler` removed; when set, the Prisma CLI and
+seed use it for DDL while the app keeps the pooled one. Same vars must exist in
+Vercel → Project → Settings → Environment Variables.
 
-**STILL TODO (needs Neon + Cloudinary creds):**
-1. Switch Prisma datasource `sqlite` → `postgresql`, adapter libsql → `@prisma/adapter-pg`
-   (or Neon serverless adapter), set `DATABASE_URL` to Neon, run migrations.
-2. Swap local CV storage → Cloudinary upload in `app/api/applications/route.ts`.
+**STILL TODO (needs Cloudinary creds):**
+1. Swap local CV storage → Cloudinary upload in `app/api/applications/route.ts`
+   (`public/uploads/` is not writable on Vercel — uploads will fail in prod until this
+   lands).
 3. Extend the CMS to bilingual page text (About/Services) + worker counts + media,
    and wire more public components to `getSettings`/`SiteContent`.
 4. Harden: rate-limit forms, admin user management UI, pagination on admin lists.
 
-**Pending credentials (needed for Phase 2 DB/upload work):** Neon connection
-string, Cloudinary cloud name + API key/secret.
+**Pending credentials:** Cloudinary cloud name + API key/secret. (Neon is wired up —
+migration `*_init` applied to the `neondb` public schema and seeded.)
 
 ---
 

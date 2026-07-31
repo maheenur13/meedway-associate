@@ -1,5 +1,7 @@
 // Prisma 7 schema. Client generated to src/generated/prisma (new generator).
-// Dev uses SQLite; switch datasource provider to "postgresql" for Neon later.
+// Neon Postgres via the @prisma/adapter-pg driver adapter.
+// The datasource URL lives in prisma.config.ts (CLI) / src/lib/prisma.ts (runtime),
+// both reading DATABASE_URL — Prisma 7 datasource blocks take no url with adapters.
 
 generator client {
   provider = "prisma-client"
@@ -7,7 +9,7 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
 }
 
 model User {
