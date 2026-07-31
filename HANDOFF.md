@@ -200,7 +200,11 @@ NOTE: forms only capture values from REAL keyboard input (RHF ignores programmat
 - **Auth.js v5** (`src/lib/auth.ts`, credentials + bcrypt, JWT). Admin at `/admin`
   (outside `[locale]`, own html/body). Guard: `auth()` check in
   `app/admin/(panel)/layout.tsx`; login at `/admin/login`.
-  **Dev admin login: `admin@meedassociates.com` / `admin1234`.**
+  **Dev admin login: `admin@meedassociates.com` / `admin1234`** (seed default —
+  delete before go-live). Real admin: `meedassociateltd@gmail.com` (password not
+  recorded here on purpose). Emails are stored + compared lowercased.
+  Add or reset an admin with `pnpm db:create-admin <email> <password> [name]`
+  (`scripts/create-admin.ts`, bcrypt cost 10, upserts by email).
 - **Admin UI = Ant Design v6** (native React 19). Setup: `@ant-design/nextjs-registry`
   `AntdRegistry` + `AdminProviders` (ConfigProvider theme colorPrimary #1d4ed8 + antd
   `App`) in `app/admin/layout.tsx`. Responsive shell `components/admin/admin-shell.tsx`:

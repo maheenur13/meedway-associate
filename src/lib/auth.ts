@@ -14,7 +14,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         password: { label: "Password", type: "password" },
       },
       authorize: async (credentials) => {
-        const email = (credentials?.email as string | undefined)?.trim();
+        // Lowercased to match how accounts are stored (scripts/create-admin.ts),
+        // so a capitalised email still logs in.
+        const email = (credentials?.email as string | undefined)
+          ?.trim()
+          .toLowerCase();
         const password = credentials?.password as string | undefined;
         if (!email || !password) return null;
 
