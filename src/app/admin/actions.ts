@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { signOut } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { SETTING_KEYS } from "@/lib/settings-fields";
 
 export async function signOutAction() {
   await signOut({ redirectTo: "/admin/login" });
@@ -83,14 +84,20 @@ export async function updateStatus(
   return { ok: true };
 }
 
-export async function updateSettings(values: Record<string, string>) {
-  const keys = ["name", "licence", "md", "address", "phone", "email", "whatsapp", "hours"];
-  for (const key of keys) {
-    const valueEn = String(values[key] ?? "");
+export type SettingsInput = Record<string, { en?: string; bn?: string }>;
+
+/**
+ * Saves the Content page. Only known keys are written, and a blank value means
+ * "fall back to the built-in default" (see src/lib/settings.ts).
+ */
+export async function updateSettings(values: SettingsInput) {
+  for (const key of SETTING_KEYS) {
+    const valueEn = String(values[key]?.en ?? "").trim();
+    const valueBn = String(values[key]?.bn ?? "").trim();
     await prisma.siteContent.upsert({
       where: { key },
-      update: { valueEn },
-      create: { key, valueEn },
+      update: { valueEn, valueBn },
+      create: { key, valueEn, valueBn },
     });
   }
   revalidatePath("/", "layout");

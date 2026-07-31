@@ -5,16 +5,19 @@ import { Button } from "@/components/ui/button";
 import { Reveal } from "@/components/ui/reveal";
 import { CountUp } from "@/components/ui/count-up";
 import { HeroMotion } from "./hero-motion";
+import { splitStat, type Settings } from "@/lib/settings-fields";
 
-export function Hero() {
+export function Hero({ settings }: { settings: Settings }) {
   const t = useTranslations("hero");
   const s = useTranslations("stats");
 
+  // CMS values like "5,000+" / "98%" split into a number for the animated
+  // counter plus a suffix; unparseable input keeps the previous default.
   const stats = [
-    { value: 5000, suffix: "+", label: s("placed"), icon: Users },
-    { value: 8, suffix: "", label: s("countries"), icon: Globe2 },
-    { value: 98, suffix: "%", label: s("deployed"), icon: TrendingUp },
-  ];
+    { raw: settings.statPlaced, fallback: { value: 5000, suffix: "+" }, label: s("placed"), icon: Users },
+    { raw: settings.statCountries, fallback: { value: 8, suffix: "" }, label: s("countries"), icon: Globe2 },
+    { raw: settings.statDeployed, fallback: { value: 98, suffix: "%" }, label: s("deployed"), icon: TrendingUp },
+  ].map(({ raw, fallback, ...rest }) => ({ ...(splitStat(raw) ?? fallback), ...rest }));
 
   return (
     <section className="relative overflow-hidden pt-10 pb-16 sm:pt-16">

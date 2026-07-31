@@ -5,9 +5,12 @@ import { cn } from "@/lib/utils";
 export function Logo({
   className,
   onDark = false,
+  name,
 }: {
   className?: string;
   onDark?: boolean;
+  /** Company name from the CMS (`getSettings().shortName`). */
+  name?: string;
 }) {
   const t = useTranslations("brand");
   return (
@@ -54,7 +57,7 @@ export function Logo({
           onDark ? "text-white" : "text-ink"
         )}
       >
-        {t("name")}
+        {name || t("name")}
       </span>
     </Link>
   );

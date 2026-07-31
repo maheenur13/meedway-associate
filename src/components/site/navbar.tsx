@@ -45,7 +45,7 @@ function HamburgerIcon({ open }: { open: boolean }) {
   );
 }
 
-export function Navbar() {
+export function Navbar({ brandName }: { brandName?: string }) {
   const t = useTranslations("nav");
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -68,7 +68,7 @@ export function Navbar() {
     >
       <Container>
         <div className="flex h-16 items-center justify-between">
-          <Logo />
+          <Logo name={brandName} />
 
           <nav className="hidden items-center gap-1 lg:flex">
             {links.map((l) => (

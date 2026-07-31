@@ -1,4 +1,5 @@
 import { setRequestLocale } from "next-intl/server";
+import { getSettings, toSettingLocale } from "@/lib/settings";
 import { Hero } from "@/components/home/hero";
 import { TrustMarquee } from "@/components/home/trust-marquee";
 import { Intro } from "@/components/home/intro";
@@ -15,10 +16,11 @@ export default async function HomePage({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
+  const settings = await getSettings(toSettingLocale(locale));
 
   return (
     <>
-      <Hero />
+      <Hero settings={settings} />
       <TrustMarquee />
       <Intro />
       <Categories />

@@ -38,7 +38,12 @@ export const siteConfig = {
   },
 } as const;
 
-export function whatsappLink(message?: string) {
-  const base = `https://wa.me/${siteConfig.whatsapp}`;
+/**
+ * Builds a wa.me link. Pass the number from `getSettings()` so the CMS value wins;
+ * falls back to the siteConfig default when it is blank.
+ */
+export function whatsappLink(number?: string, message?: string) {
+  const digits = (number || siteConfig.whatsapp).replace(/\D/g, "");
+  const base = `https://wa.me/${digits}`;
   return message ? `${base}?text=${encodeURIComponent(message)}` : base;
 }

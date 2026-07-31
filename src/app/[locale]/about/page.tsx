@@ -20,7 +20,7 @@ import { SectionHeader } from "@/components/ui/section-header";
 import { Reveal } from "@/components/ui/reveal";
 import { Photo } from "@/components/ui/photo";
 import { CtaBand } from "@/components/home/cta-band";
-import { siteConfig } from "@/lib/site-config";
+import { getSettings, toSettingLocale, type Settings } from "@/lib/settings";
 
 export async function generateMetadata({
   params,
@@ -40,11 +40,11 @@ const values: { key: string; icon: LucideIcon }[] = [
   { key: "satisfaction", icon: Smile },
 ];
 
-function AboutContent() {
+function AboutContent({ settings }: { settings: Settings }) {
   const t = useTranslations("about");
 
   const facts = [
-    { icon: ShieldCheck, label: t("facts.licence"), value: siteConfig.licenceNo },
+    { icon: ShieldCheck, label: t("facts.licence"), value: settings.licence },
     { icon: BadgeCheck, label: t("facts.member"), value: t("membership") },
     { icon: MapPin, label: t("facts.office"), value: t("officeLocation") },
     { icon: Globe2, label: t("facts.markets"), value: t("marketsValue") },
@@ -135,9 +135,9 @@ function AboutContent() {
             <Reveal>
               <Photo
                 src="/photos/team/md.jpg"
-                alt={siteConfig.managingDirector}
+                alt={settings.md}
                 ratio="4 / 5"
-                caption={siteConfig.managingDirector}
+                caption={settings.md}
               />
             </Reveal>
             <div>
@@ -156,7 +156,7 @@ function AboutContent() {
                 <p className="mt-3 text-lg leading-relaxed text-ink-soft">
                   {t("leadership.quote")}
                 </p>
-                <p className="mt-5 font-medium">{siteConfig.managingDirector}</p>
+                <p className="mt-5 font-medium">{settings.md}</p>
                 <p className="text-sm text-ink-mute">{t("leadership.role")}</p>
               </Reveal>
             </div>
@@ -210,5 +210,6 @@ export default async function AboutPage({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
-  return <AboutContent />;
+  const settings = await getSettings(toSettingLocale(locale));
+  return <AboutContent settings={settings} />;
 }

@@ -1,12 +1,15 @@
-import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 import { ArrowRight, MessageCircle } from "lucide-react";
 import { Container } from "@/components/ui/container";
 import { Button } from "@/components/ui/button";
 import { Reveal } from "@/components/ui/reveal";
 import { whatsappLink } from "@/lib/site-config";
+import { getSiteSettings } from "@/lib/settings";
 
-export function CtaBand() {
-  const t = useTranslations("cta");
+// Rendered on several pages, so it reads the CMS itself instead of taking props.
+export async function CtaBand() {
+  const t = await getTranslations("cta");
+  const settings = await getSiteSettings();
 
   return (
     <section className="py-20">
@@ -30,7 +33,7 @@ export function CtaBand() {
                   {t("seekers")}
                 </Button>
                 <a
-                  href={whatsappLink()}
+                  href={whatsappLink(settings.whatsapp)}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex h-12 items-center gap-2 rounded-[11px] px-5 text-[15px] font-medium text-white/80 transition-colors hover:text-white"

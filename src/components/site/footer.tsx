@@ -2,13 +2,20 @@ import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { Container } from "@/components/ui/container";
 import { Logo } from "./logo";
-import { getSettings } from "@/lib/settings";
+import { getSiteSettings } from "@/lib/settings";
+// lucide-react v1 no longer ships brand icons, so social links are text pills.
 import { Mail, Phone, MapPin } from "lucide-react";
 
 export async function Footer() {
   const t = await getTranslations();
-  const settings = await getSettings();
+  const settings = await getSiteSettings();
   const year = 2026;
+
+  // A blank URL (or the "#" placeholder) hides the icon rather than linking nowhere.
+  const socials = [
+    { href: settings.facebook, label: "Facebook" },
+    { href: settings.linkedin, label: "LinkedIn" },
+  ].filter((s) => s.href && s.href !== "#");
 
   const explore = [
     { href: "/jobs", key: "nav.jobs" },
@@ -25,13 +32,28 @@ export async function Footer() {
       <Container>
         <div className="grid gap-10 py-14 md:grid-cols-[1.4fr_1fr_1fr_1.2fr]">
           <div>
-            <Logo onDark />
+            <Logo onDark name={settings.shortName} />
             <p className="mt-4 max-w-xs text-sm leading-relaxed text-white/60">
-              {t("footer.tagline")}
+              {settings.footerTagline}
             </p>
             <p className="mt-4 text-xs text-white/40">
               {t("footer.licence")} {settings.licence}
             </p>
+            {socials.length > 0 && (
+              <div className="mt-5 flex flex-wrap items-center gap-2">
+                {socials.map((s) => (
+                  <a
+                    key={s.label}
+                    href={s.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center rounded-lg border border-white/10 px-3 py-1.5 text-xs text-white/60 transition-colors hover:border-white/25 hover:text-white"
+                  >
+                    {s.label}
+                  </a>
+                ))}
+              </div>
+            )}
           </div>
 
           <div>

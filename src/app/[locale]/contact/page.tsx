@@ -5,7 +5,8 @@ import { MapPin, Phone, Mail, MessageCircle, Clock } from "lucide-react";
 import { Container } from "@/components/ui/container";
 import { PageHero } from "@/components/ui/page-hero";
 import { ContactForm } from "@/components/forms/contact-form";
-import { siteConfig, whatsappLink } from "@/lib/site-config";
+import { whatsappLink } from "@/lib/site-config";
+import { getSettings, toSettingLocale, type Settings } from "@/lib/settings";
 
 export async function generateMetadata({
   params,
@@ -17,18 +18,18 @@ export async function generateMetadata({
   return { title: t("eyebrow"), description: t("intro") };
 }
 
-function ContactContent() {
+function ContactContent({ settings }: { settings: Settings }) {
   const t = useTranslations("contact");
 
   const details = [
-    { icon: MapPin, label: t("address"), value: siteConfig.address, href: undefined },
-    { icon: Phone, label: t("phone"), value: siteConfig.phone, href: `tel:${siteConfig.phone}` },
-    { icon: Mail, label: t("email"), value: siteConfig.email, href: `mailto:${siteConfig.email}` },
-    { icon: Clock, label: t("hours"), value: t("hoursValue"), href: undefined },
+    { icon: MapPin, label: t("address"), value: settings.address, href: undefined },
+    { icon: Phone, label: t("phone"), value: settings.phone, href: `tel:${settings.phone}` },
+    { icon: Mail, label: t("email"), value: settings.email, href: `mailto:${settings.email}` },
+    { icon: Clock, label: t("hours"), value: settings.hours, href: undefined },
   ];
 
   const mapSrc = `https://www.google.com/maps?q=${encodeURIComponent(
-    siteConfig.address
+    settings.address
   )}&output=embed`;
 
   return (
@@ -54,7 +55,10 @@ function ContactContent() {
               <div className="rounded-2xl border border-line bg-paper-2 p-6">
                 <h3 className="font-medium">{t("talk")}</h3>
                 <a
-                  href={whatsappLink("Hello Meed Associate, I would like to know more.")}
+                  href={whatsappLink(
+                    settings.whatsapp,
+                    `Hello ${settings.shortName}, I would like to know more.`,
+                  )}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#25D366] px-5 py-3 font-medium text-white transition hover:brightness-105"
@@ -63,10 +67,10 @@ function ContactContent() {
                   {t("chat")}
                 </a>
                 <a
-                  href={`tel:${siteConfig.phone}`}
+                  href={`tel:${settings.phone}`}
                   className="mt-3 flex items-center justify-center gap-2 rounded-xl border border-line-2 px-5 py-2.5 text-sm font-medium text-ink transition hover:bg-black/[0.03]"
                 >
-                  <Phone className="h-4 w-4" /> {siteConfig.phone}
+                  <Phone className="h-4 w-4" /> {settings.phone}
                 </a>
               </div>
 
@@ -106,7 +110,7 @@ function ContactContent() {
           {/* map — trust signal, full width */}
           <div className="mt-8 overflow-hidden rounded-3xl border border-line">
             <iframe
-              title="Meed Associate office location"
+              title={`${settings.shortName} office location`}
               src={mapSrc}
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
@@ -126,5 +130,6 @@ export default async function ContactPage({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
-  return <ContactContent />;
+  const settings = await getSettings(toSettingLocale(locale));
+  return <ContactContent settings={settings} />;
 }
