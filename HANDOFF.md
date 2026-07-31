@@ -231,12 +231,21 @@ NOTE: forms only capture values from REAL keyboard input (RHF ignores programmat
   `settings-fields.ts` instead, or `pg` lands in the browser bundle and the build fails
   (`the chunking context does not support external modules`). `server-only` makes that
   mistake loud.
+  The brand name and licence were ALSO hardcoded inside `messages/{en,bn}.json`, so
+  they are now ICU placeholders — `hero.badge`/`trust.licence` take `{licence}`,
+  `why.eyebrow`/`reach.subtitle`/`about.intro`/`about.leadership.quote` take `{company}`
+  (`about.intro` takes both). **Any component rendering those keys must pass the values**
+  (`t("badge", { licence: settings.licence })`) or the raw `{licence}` shows up. That is
+  why `Intro`/`Why`/`WorldReach`/`TrustMarquee` are now async server components.
   Wired into: navbar/footer logo (`Logo name={...}`), footer blurb + social pills,
   `generateMetadata` titles, contact page (details, map, tel, WhatsApp), about page
   (licence, MD), CTA band + floating WhatsApp button, and the three hero counters
   (`splitStat("5,000+")` → `{value:5000,suffix:"+"}`, falling back to the hardcoded
-  default if unparseable). Navbar and WhatsappButton are client components, so the
-  locale layout resolves the values and passes them as props.
+  default if unparseable), plus the admin chrome (login heading, sidebar, tab title).
+  Navbar / WhatsappButton / OfficeCollage / AdminShell are client components, so their
+  server parent resolves the values and passes them as props.
+  Note `shortName` resolves as: stored shortName → **stored company name** → shipped
+  default, so editing only "Company name" does change the navbar.
 - **Public forms now PERSIST**: `/api/{contact,worker-requests,applications}` write
   to DB (verified). CVs saved to `public/uploads/cv/` in dev (TODO: Cloudinary).
   Public `/jobs` reads published jobs from DB.
