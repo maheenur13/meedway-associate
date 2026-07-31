@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { Reveal } from "@/components/ui/reveal";
-import { jobs, jobCategories, jobCountries, type Job } from "@/lib/jobs-data";
+import { type Job } from "@/lib/jobs-data";
 import { cn } from "@/lib/utils";
 
 const countryCodes: Record<string, string> = {
@@ -130,10 +130,19 @@ function JobCard({ job }: { job: Job }) {
   );
 }
 
-export function JobsBrowser() {
+export function JobsBrowser({ jobs }: { jobs: Job[] }) {
   const t = useTranslations("jobs");
   const [country, setCountry] = useState<string>("");
   const [category, setCategory] = useState<string>("");
+
+  const jobCountries = useMemo(
+    () => Array.from(new Set(jobs.map((j) => j.country))),
+    [jobs]
+  );
+  const jobCategories = useMemo(
+    () => Array.from(new Set(jobs.map((j) => j.category))),
+    [jobs]
+  );
 
   const filtered = useMemo(
     () =>
@@ -142,7 +151,7 @@ export function JobsBrowser() {
           (!country || j.country === country) &&
           (!category || j.category === category)
       ),
-    [country, category]
+    [jobs, country, category]
   );
 
   return (

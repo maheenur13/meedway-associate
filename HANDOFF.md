@@ -185,13 +185,45 @@ component with `useTranslations` for bilingual errors), submit to API routes
 NOTE: forms only capture values from REAL keyboard input (RHF ignores programmatic
 `.value`/`form_input`) — verify form flows with the `computer` type action, not JS.
 
-**NOT STARTED — rest of Phase 2+ (needs Neon + Cloudinary creds):**
-1. **Prisma schema + Neon** — models: `User`(admin), `Job`, `Application`,
-   `WorkerRequest`, `CompanyProfile`/content, `WorkerCategory`, `Industry`,
-   `Country`, `MediaAsset` (see `docs/REQUIREMENTS.md` §6). Then wire the 3 API
-   routes to persist + upload CVs to Cloudinary.
-2. **Admin portal:** Auth.js login + dashboard — job CRUD, view applications
-   (download CV) + worker requests, full bilingual content CMS + media management.
+**Phase 2 — ADMIN + DB DONE (local dev):**
+- **Prisma 7** (new `prisma-client` generator → `src/generated/prisma`, config in
+  `prisma.config.ts`). Dev DB = **SQLite via libsql driver adapter** (`PrismaLibSql`
+  from `@prisma/adapter-libsql`; Prisma 7 REQUIRES a driver adapter — no bare
+  `new PrismaClient()`). Client singleton: `src/lib/prisma.ts`. Models: User, Job,
+  Application, WorkerRequest, ContactMessage, SiteContent. Seed: `prisma/seed.ts`
+  (`pnpm exec tsx prisma/seed.ts`) → admin user + jobs.
+- **Auth.js v5** (`src/lib/auth.ts`, credentials + bcrypt, JWT). Admin at `/admin`
+  (outside `[locale]`, own html/body). Guard: `auth()` check in
+  `app/admin/(panel)/layout.tsx`; login at `/admin/login`.
+  **Dev admin login: `admin@meedassociates.com` / `admin1234`.**
+- **Admin UI = Ant Design v6** (native React 19). Setup: `@ant-design/nextjs-registry`
+  `AntdRegistry` + `AdminProviders` (ConfigProvider theme colorPrimary #1d4ed8 + antd
+  `App`) in `app/admin/layout.tsx`. Responsive shell `components/admin/admin-shell.tsx`:
+  antd `Layout` with fixed `Sider` on desktop, `Drawer` + hamburger on mobile
+  (Grid.useBreakpoint, lg=992px). Pages are server components (prisma fetch) that pass
+  plain DTOs to client antd views: `dashboard-view` (Statistic cards + Table),
+  `jobs-table` (Table + **Modal** create/edit form, Popconfirm delete, publish Switch),
+  `applications-table` / `requests-table` (Table + status Select), `messages-view`
+  (List of Cards), `settings-form` (Form). Mutations = client-callable server actions
+  in `app/admin/actions.ts` (plain args, no redirect: upsertJob/removeJob/setJobPublished/
+  updateStatus/updateSettings) + `router.refresh()`. Login = antd Form.
+  **Content CMS** persists to SiteContent; `src/lib/settings.ts` `getSettings()` merges
+  DB over siteConfig — footer reads it. Needs `dayjs` (DatePicker).
+- **Public forms now PERSIST**: `/api/{contact,worker-requests,applications}` write
+  to DB (verified). CVs saved to `public/uploads/cv/` in dev (TODO: Cloudinary).
+  Public `/jobs` reads published jobs from DB.
+
+**Env:** `.env.local` (READ-LOCKED — can't be edited by tools) has
+`DATABASE_URL="file:./prisma/dev.db"` + `AUTH_SECRET`. `prisma.config.ts` only uses
+`DATABASE_URL` when it starts with `postgres`, else forces the sqlite path.
+
+**STILL TODO (needs Neon + Cloudinary creds):**
+1. Switch Prisma datasource `sqlite` → `postgresql`, adapter libsql → `@prisma/adapter-pg`
+   (or Neon serverless adapter), set `DATABASE_URL` to Neon, run migrations.
+2. Swap local CV storage → Cloudinary upload in `app/api/applications/route.ts`.
+3. Extend the CMS to bilingual page text (About/Services) + worker counts + media,
+   and wire more public components to `getSettings`/`SiteContent`.
+4. Harden: rate-limit forms, admin user management UI, pagination on admin lists.
 
 **Pending credentials (needed for Phase 2 DB/upload work):** Neon connection
 string, Cloudinary cloud name + API key/secret.
