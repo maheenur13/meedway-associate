@@ -1,10 +1,12 @@
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
+import { getSettings } from "@/lib/settings";
 import { LoginForm } from "@/components/admin/login-form";
 
 export default async function AdminLoginPage() {
   const session = await auth();
   if (session) redirect("/admin");
+  const settings = await getSettings();
 
   return (
     <div
@@ -33,7 +35,7 @@ export default async function AdminLoginPage() {
               fontSize: 18,
             }}
           >
-            M
+            {settings.shortName.trim().charAt(0).toUpperCase() || "M"}
           </span>
           <h1
             style={{
@@ -44,7 +46,7 @@ export default async function AdminLoginPage() {
               color: "#0a0a0a",
             }}
           >
-            Meed Associate Admin
+            {settings.shortName} Admin
           </h1>
           <p style={{ margin: 0, fontSize: 14, color: "#8a8a8a" }}>
             Sign in to manage the site

@@ -1,5 +1,6 @@
-import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 import { BadgeCheck } from "lucide-react";
+import { getSiteSettings } from "@/lib/settings";
 
 const keys = [
   "baira",
@@ -12,9 +13,11 @@ const keys = [
   "experienced",
 ] as const;
 
-export function TrustMarquee() {
-  const t = useTranslations("trust");
-  const items = keys.map((k) => t(k));
+export async function TrustMarquee() {
+  const t = await getTranslations("trust");
+  const settings = await getSiteSettings();
+  // Only "licence" uses {licence}; extra values are ignored for the other keys.
+  const items = keys.map((k) => t(k, { licence: settings.licence }));
   // duplicate the list so the -50% translate loops seamlessly
   const loop = [...items, ...items];
 

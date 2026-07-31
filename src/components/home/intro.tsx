@@ -1,10 +1,12 @@
-import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 import { Container } from "@/components/ui/container";
 import { Reveal } from "@/components/ui/reveal";
+import { getSiteSettings } from "@/lib/settings";
 import { OfficeCollage } from "./office-collage";
 
-export function Intro() {
-  const t = useTranslations("intro");
+export async function Intro() {
+  const t = await getTranslations("intro");
+  const settings = await getSiteSettings();
 
   return (
     <section className="py-20">
@@ -26,7 +28,7 @@ export function Intro() {
             </Reveal>
           </div>
 
-          <OfficeCollage />
+          <OfficeCollage brandName={settings.shortName} />
         </div>
       </Container>
     </section>

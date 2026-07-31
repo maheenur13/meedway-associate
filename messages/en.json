@@ -15,7 +15,7 @@
     "requestWorkers": "Request workers"
   },
   "hero": {
-    "badge": "BAIRA member · Licence RL-2927",
+    "badge": "BAIRA member · Licence {licence}",
     "titleA": "Skilled workers,",
     "titleB": "placed",
     "titleAccent": "worldwide.",
@@ -62,7 +62,7 @@
     }
   },
   "why": {
-    "eyebrow": "Why Meedway",
+    "eyebrow": "Why {company}",
     "title": "Why companies and workers choose us.",
     "items": {
       "one": { "title": "Licensed & compliant", "body": "A registered recruitment agency operating under a valid recruiting licence." },
@@ -74,7 +74,7 @@
   "about": {
     "eyebrow": "About us",
     "title": "A trusted overseas recruitment partner from Bangladesh.",
-    "intro": "Meed Associate Ltd. is a BAIRA-member recruitment agency operating under Recruiting Licence RL-2927. We help qualified workers find overseas employment and help international employers recruit reliable, suitable workers — handled end to end from our office in Banani, Dhaka.",
+    "intro": "{company} is a BAIRA-member recruitment agency operating under Recruiting Licence {licence}. We help qualified workers find overseas employment and help international employers recruit reliable, suitable workers — handled end to end from our office in Banani, Dhaka.",
     "facts": {
       "licence": "Recruiting Licence",
       "member": "Association",
@@ -107,7 +107,7 @@
       "eyebrow": "Leadership",
       "title": "Guided by experience",
       "role": "Managing Director",
-      "quote": "Our commitment is simple — treat every worker with respect and deliver every employer the right people. That trust is what we have built Meed Associate on."
+      "quote": "Our commitment is simple — treat every worker with respect and deliver every employer the right people. That trust is what we have built {company} on."
     },
     "office": {
       "eyebrow": "Our office",
@@ -274,13 +274,13 @@
   "reach": {
     "eyebrow": "Our global reach",
     "title": "Workers deployed across the Gulf and Asia",
-    "subtitle": "Meed Associate supplies skilled and general workers to employers throughout these markets.",
+    "subtitle": "{company} supplies skilled and general workers to employers throughout these markets.",
     "workers": "workers",
     "hq": "Head Office · Dhaka"
   },
   "trust": {
     "baira": "BAIRA Member",
-    "licence": "Recruiting Licence RL-2927",
+    "licence": "Recruiting Licence {licence}",
     "govt": "Government Approved",
     "ethical": "Ethical Recruitment",
     "transparent": "Transparent Process",

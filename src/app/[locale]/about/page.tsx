@@ -52,7 +52,11 @@ function AboutContent({ settings }: { settings: Settings }) {
 
   return (
     <>
-      <PageHero eyebrow={t("eyebrow")} title={t("title")} intro={t("intro")} />
+      <PageHero
+        eyebrow={t("eyebrow")}
+        title={t("title")}
+        intro={t("intro", { company: settings.name, licence: settings.licence })}
+      />
 
       {/* facts strip */}
       <Container>
@@ -154,7 +158,7 @@ function AboutContent({ settings }: { settings: Settings }) {
               <Reveal delay={2}>
                 <Quote className="mt-6 h-8 w-8 text-accent/40" />
                 <p className="mt-3 text-lg leading-relaxed text-ink-soft">
-                  {t("leadership.quote")}
+                  {t("leadership.quote", { company: settings.shortName })}
                 </p>
                 <p className="mt-5 font-medium">{settings.md}</p>
                 <p className="text-sm text-ink-mute">{t("leadership.role")}</p>

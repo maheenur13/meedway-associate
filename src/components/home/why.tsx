@@ -1,5 +1,6 @@
-import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 import { ShieldCheck, Eye, HeartHandshake, Rocket } from "lucide-react";
+import { getSiteSettings } from "@/lib/settings";
 import type { LucideIcon } from "lucide-react";
 import { Container } from "@/components/ui/container";
 import { SectionHeader } from "@/components/ui/section-header";
@@ -12,13 +13,17 @@ const items: { key: string; icon: LucideIcon }[] = [
   { key: "four", icon: Rocket },
 ];
 
-export function Why() {
-  const t = useTranslations("why");
+export async function Why() {
+  const t = await getTranslations("why");
+  const settings = await getSiteSettings();
 
   return (
     <section className="py-20">
       <Container>
-        <SectionHeader eyebrow={t("eyebrow")} title={t("title")} />
+        <SectionHeader
+          eyebrow={t("eyebrow", { company: settings.shortName })}
+          title={t("title")}
+        />
 
         <div className="mt-12 grid gap-8 sm:grid-cols-2">
           {items.map((item, i) => {

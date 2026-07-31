@@ -31,9 +31,11 @@ const items = [
 function SideNav({
   selectedKey,
   onNavigate,
+  brandName,
 }: {
   selectedKey: string;
   onNavigate: (key: string) => void;
+  brandName?: string;
 }) {
   return (
     <div style={{ height: "100%", display: "flex", flexDirection: "column" }}>
@@ -58,9 +60,11 @@ function SideNav({
             fontWeight: 700,
           }}
         >
-          M
+          {brandName?.trim().charAt(0).toUpperCase() || "M"}
         </span>
-        <span style={{ fontWeight: 600, fontSize: 15 }}>Meed Admin</span>
+        <span style={{ fontWeight: 600, fontSize: 15 }}>
+          {brandName ? `${brandName} Admin` : "Admin"}
+        </span>
       </div>
       <Menu
         theme="dark"
@@ -76,9 +80,11 @@ function SideNav({
 
 export function AdminShell({
   email,
+  brandName,
   children,
 }: {
   email?: string | null;
+  brandName?: string;
   children: ReactNode;
 }) {
   const screens = Grid.useBreakpoint();
@@ -113,7 +119,11 @@ export function AdminShell({
     <Layout style={{ minHeight: "100vh" }}>
       {!isMobile && (
         <Sider width={232} style={{ background: "#0f1115" }}>
-          <SideNav selectedKey={selectedKey} onNavigate={navigate} />
+          <SideNav
+            selectedKey={selectedKey}
+            onNavigate={navigate}
+            brandName={brandName}
+          />
         </Sider>
       )}
 
@@ -128,7 +138,11 @@ export function AdminShell({
             wrapper: { width: 240 },
           }}
         >
-          <SideNav selectedKey={selectedKey} onNavigate={navigate} />
+          <SideNav
+            selectedKey={selectedKey}
+            onNavigate={navigate}
+            brandName={brandName}
+          />
         </Drawer>
       )}
 

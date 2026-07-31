@@ -1,5 +1,6 @@
-import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 import { ArrowUpRight } from "lucide-react";
+import { getSiteSettings } from "@/lib/settings";
 import { Container } from "@/components/ui/container";
 import { Reveal } from "@/components/ui/reveal";
 
@@ -50,8 +51,9 @@ function Flag({ code, className }: { code: string; className?: string }) {
   );
 }
 
-export function WorldReach() {
-  const t = useTranslations("reach");
+export async function WorldReach() {
+  const t = await getTranslations("reach");
+  const settings = await getSiteSettings();
   const legend = locations.filter((l) => !l.hq);
 
   return (
@@ -73,7 +75,9 @@ export function WorldReach() {
             </h2>
           </Reveal>
           <Reveal delay={2}>
-            <p className="mt-4 text-panel-ink/65">{t("subtitle")}</p>
+            <p className="mt-4 text-panel-ink/65">
+              {t("subtitle", { company: settings.shortName })}
+            </p>
           </Reveal>
         </div>
 
@@ -82,7 +86,7 @@ export function WorldReach() {
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/images/world-dotted.svg"
-              alt="World map showing Meed Associate's deployment countries"
+              alt={`World map showing ${settings.shortName} deployment countries`}
               className="pointer-events-none w-full select-none opacity-90"
             />
 

@@ -216,8 +216,27 @@ NOTE: forms only capture values from REAL keyboard input (RHF ignores programmat
   (List of Cards), `settings-form` (Form). Mutations = client-callable server actions
   in `app/admin/actions.ts` (plain args, no redirect: upsertJob/removeJob/setJobPublished/
   updateStatus/updateSettings) + `router.refresh()`. Login = antd Form.
-  **Content CMS** persists to SiteContent; `src/lib/settings.ts` `getSettings()` merges
-  DB over siteConfig — footer reads it. Needs `dayjs` (DatePicker).
+  Needs `dayjs` (DatePicker).
+- **Content CMS (`/admin/content`) — bilingual, field-driven.**
+  `src/lib/settings-fields.ts` holds `SETTING_FIELDS` (key, label, group, `localized`,
+  hint) — the single source of truth for the DB keys, the admin form, AND the resolver.
+  **Add a field there and it appears in the admin automatically**; no form edits needed.
+  `src/lib/settings.ts` (marked `server-only`) resolves it: `getSettings(locale)` merges
+  SiteContent over per-locale defaults, where localized defaults come from
+  `messages/{en,bn}.json` and the rest from `siteConfig`.
+  Resolution order per field: `valueBn` (bn only) → `valueEn` → built-in default, so
+  **blank means "use the default"** and filling only English covers both languages.
+  `getSiteSettings()` is the convenience wrapper that reads the request locale.
+  IMPORTANT: `settings.ts` imports Prisma — client components MUST import from
+  `settings-fields.ts` instead, or `pg` lands in the browser bundle and the build fails
+  (`the chunking context does not support external modules`). `server-only` makes that
+  mistake loud.
+  Wired into: navbar/footer logo (`Logo name={...}`), footer blurb + social pills,
+  `generateMetadata` titles, contact page (details, map, tel, WhatsApp), about page
+  (licence, MD), CTA band + floating WhatsApp button, and the three hero counters
+  (`splitStat("5,000+")` → `{value:5000,suffix:"+"}`, falling back to the hardcoded
+  default if unparseable). Navbar and WhatsappButton are client components, so the
+  locale layout resolves the values and passes them as props.
 - **Public forms now PERSIST**: `/api/{contact,worker-requests,applications}` write
   to DB (verified). CVs saved to `public/uploads/cv/` in dev (TODO: Cloudinary).
   Public `/jobs` reads published jobs from DB.
@@ -232,9 +251,10 @@ Vercel → Project → Settings → Environment Variables.
 1. Swap local CV storage → Cloudinary upload in `app/api/applications/route.ts`
    (`public/uploads/` is not writable on Vercel — uploads will fail in prod until this
    lands).
-3. Extend the CMS to bilingual page text (About/Services) + worker counts + media,
-   and wire more public components to `getSettings`/`SiteContent`.
-4. Harden: rate-limit forms, admin user management UI, pagination on admin lists.
+2. Extend the CMS to full page copy (About/Services body text) + media/photos. Brand,
+   contact, social and the hero counters are done — add a row to `SETTING_FIELDS` for
+   anything else that is a single string.
+3. Harden: rate-limit forms, admin user management UI, pagination on admin lists.
 
 **Pending credentials:** Cloudinary cloud name + API key/secret. (Neon is wired up —
 migration `*_init` applied to the `neondb` public schema and seeded.)

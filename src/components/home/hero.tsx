@@ -32,7 +32,7 @@ export function Hero({ settings }: { settings: Settings }) {
           <Reveal>
             <span className="inline-flex items-center gap-2 rounded-full border border-line-2 bg-paper-2 px-3 py-1.5 text-xs text-ink-soft">
               <span className="h-1.5 w-1.5 rounded-full bg-gold" />
-              {t("badge")}
+              {t("badge", { licence: settings.licence })}
             </span>
           </Reveal>
 

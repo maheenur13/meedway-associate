@@ -13,7 +13,7 @@ import { useIsDesktop } from "@/lib/use-media-query";
  * viewport those offsets ease to zero, so the photos detach into the tidy grid.
  * Desktop only; mobile shows the static grid.
  */
-export function OfficeCollage() {
+export function OfficeCollage({ brandName }: { brandName?: string }) {
   const ref = useRef<HTMLDivElement>(null);
   const isDesktop = useIsDesktop();
 
@@ -53,7 +53,7 @@ export function OfficeCollage() {
           fill
           priority
           className="h-full w-full shadow-2xl shadow-panel/20"
-          caption={`${siteConfig.short} · Banani`}
+          caption={`${brandName || siteConfig.short} · Banani`}
           sizes="(max-width: 768px) 55vw, 480px"
         />
       </motion.div>

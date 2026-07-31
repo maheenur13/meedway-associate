@@ -98,19 +98,20 @@ export const getSettings = cache(
   async (locale: SettingLocale = "en"): Promise<Settings> => {
     const [rows, defaults] = await Promise.all([readRows(), getDefaults(locale)]);
 
-    const pick = (key: SettingKey): string => {
+    /** The admin-entered override for a key, or "" when not set. */
+    const stored = (key: SettingKey): string => {
       const row = rows[key];
-      const stored =
-        locale === "bn" ? row?.bn?.trim() || row?.en?.trim() : row?.en?.trim();
-      return stored || defaults[key];
+      return (locale === "bn" ? row?.bn?.trim() || row?.en?.trim() : row?.en?.trim()) ?? "";
     };
 
     const resolved = Object.fromEntries(
-      SETTING_KEYS.map((key) => [key, pick(key)]),
+      SETTING_KEYS.map((key) => [key, stored(key) || defaults[key]]),
     ) as Settings;
 
-    // The navbar should never render empty: fall back to the full company name.
-    resolved.shortName = resolved.shortName || resolved.name;
+    // "Leave blank to use the company name": an admin-entered company name has to
+    // beat the built-in short default, otherwise editing only the company name
+    // leaves the navbar showing the old shipped value.
+    resolved.shortName = stored("shortName") || stored("name") || defaults.shortName;
     return resolved;
   },
 );
