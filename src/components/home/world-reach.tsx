@@ -1,6 +1,8 @@
 import { getTranslations } from "next-intl/server";
 import { ArrowUpRight } from "lucide-react";
 import { getSiteSettings } from "@/lib/settings";
+import { HQ } from "@/lib/reach-map";
+import type { ReachLocation } from "@/lib/reach";
 import { Container } from "@/components/ui/container";
 import { Reveal } from "@/components/ui/reveal";
 
@@ -15,20 +17,6 @@ type Loc = {
   anchor?: Anchor;
   hq?: boolean;
 };
-
-// Pin positions pre-computed from dotted-map (viewBox 103×52) as percentages.
-// TODO: replace worker counts with real figures from the client.
-const locations: Loc[] = [
-  { name: "Malaysia", code: "my", workers: 4500, left: 80.6, top: 58.3, pill: true, anchor: "bottom" },
-  { name: "Saudi Arabia", code: "sa", workers: 3300, left: 63.1, top: 45.0, pill: true, anchor: "left" },
-  { name: "UAE", code: "ae", workers: 2000, left: 66.0, top: 45.0 },
-  { name: "Oman", code: "om", workers: 1000, left: 66.5, top: 46.6 },
-  { name: "Qatar", code: "qa", workers: 900, left: 65.1, top: 45.0 },
-  { name: "Kuwait", code: "kw", workers: 800, left: 64.1, top: 41.6 },
-  { name: "Bahrain", code: "bh", workers: 500, left: 65.1, top: 44.4 },
-  { name: "Jordan", code: "jo", workers: 400, left: 61.2, top: 41.6 },
-  { name: "Bangladesh", code: "bd", workers: 0, left: 77.2, top: 46.6, pill: true, anchor: "top", hq: true },
-];
 
 const pillPos: Record<Anchor, string> = {
   right: "left-3 top-0 -translate-y-1/2",
@@ -51,10 +39,17 @@ function Flag({ code, className }: { code: string; className?: string }) {
   );
 }
 
-export async function WorldReach() {
+/** `items` comes from the DB (admin → Global reach), already localized. */
+export async function WorldReach({ items }: { items: ReachLocation[] }) {
   const t = await getTranslations("reach");
   const settings = await getSiteSettings();
-  const legend = locations.filter((l) => !l.hq);
+  const legend: Loc[] = items;
+  // The head office pin is not a destination market and carries no worker
+  // count, so it stays in code rather than being a deletable CMS row.
+  const locations: Loc[] = [
+    ...legend,
+    { name: t("hqCountry"), code: HQ.code, workers: 0, left: HQ.left, top: HQ.top, pill: true, anchor: HQ.anchor, hq: true },
+  ];
 
   return (
     <section className="relative overflow-hidden bg-panel py-20 text-panel-ink">

@@ -99,3 +99,21 @@ model TradeCategory {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+/// Destination markets shown on the home page "global reach" map + legend.
+/// Map coordinates are NOT stored here — they live in src/lib/reach-map.ts,
+/// keyed by `code`, so an admin never has to enter pixel positions.
+model ReachCountry {
+  id        String   @id @default(cuid())
+  /// ISO alpha-2, lowercase. Keys into REACH_COORDS and the flag CDN.
+  code      String   @unique
+  nameEn    String
+  nameBn    String?
+  workers   Int      @default(0)
+  /// Show a labelled callout on the map itself (only for well-separated pins).
+  pill      Boolean  @default(false)
+  sortOrder Int      @default(0)
+  published Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

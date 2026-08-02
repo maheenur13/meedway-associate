@@ -5,6 +5,7 @@ import { signOut } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { SETTING_KEYS } from "@/lib/settings-fields";
 import { TRADE_ICON_NAMES, DEFAULT_TRADE_ICON } from "@/lib/trade-icons";
+import { REACH_CODES } from "@/lib/reach-map";
 
 export async function signOutAction() {
   await signOut({ redirectTo: "/admin/login" });
@@ -113,6 +114,69 @@ export async function removeTradeCategory(id: string) {
 export async function setTradeCategoryPublished(id: string, published: boolean) {
   await prisma.tradeCategory.update({ where: { id }, data: { published } });
   revalidateTrades();
+  return { ok: true };
+}
+
+export type ReachCountryInput = {
+  id?: string;
+  code: string;
+  nameEn: string;
+  nameBn: string;
+  workers: number;
+  pill: boolean;
+  sortOrder: number;
+  published: boolean;
+};
+
+function revalidateReach() {
+  revalidatePath("/admin/reach");
+  revalidatePath("/", "layout");
+}
+
+export async function upsertReachCountry(input: ReachCountryInput) {
+  const nameEn = input.nameEn.trim();
+  if (!nameEn) return { ok: false, error: "An English name is required." };
+
+  const code = input.code.trim().toLowerCase();
+  // Without coordinates the pin cannot be drawn, so refuse here rather than
+  // let a row exist that the map silently skips.
+  if (!REACH_CODES.includes(code)) {
+    return { ok: false, error: `No map position is defined for "${code}".` };
+  }
+
+  const data = {
+    code,
+    nameEn,
+    nameBn: input.nameBn.trim() || null,
+    workers: Number.isFinite(input.workers) ? Math.max(0, Math.trunc(input.workers)) : 0,
+    pill: input.pill,
+    sortOrder: Number.isFinite(input.sortOrder) ? Math.trunc(input.sortOrder) : 0,
+    published: input.published,
+  };
+
+  try {
+    if (input.id) {
+      await prisma.reachCountry.update({ where: { id: input.id }, data });
+    } else {
+      await prisma.reachCountry.create({ data });
+    }
+  } catch {
+    // `code` is unique — the realistic failure is adding a country twice.
+    return { ok: false, error: `"${code}" is already in the list.` };
+  }
+  revalidateReach();
+  return { ok: true };
+}
+
+export async function removeReachCountry(id: string) {
+  await prisma.reachCountry.delete({ where: { id } });
+  revalidateReach();
+  return { ok: true };
+}
+
+export async function setReachCountryPublished(id: string, published: boolean) {
+  await prisma.reachCountry.update({ where: { id }, data: { published } });
+  revalidateReach();
   return { ok: true };
 }
 

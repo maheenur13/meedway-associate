@@ -1,6 +1,7 @@
 import { setRequestLocale } from "next-intl/server";
 import { getSettings, toSettingLocale } from "@/lib/settings";
 import { getTradeCategories } from "@/lib/trade-categories";
+import { getReachLocations } from "@/lib/reach";
 import { Hero } from "@/components/home/hero";
 import { TrustMarquee } from "@/components/home/trust-marquee";
 import { Intro } from "@/components/home/intro";
@@ -17,9 +18,10 @@ export default async function HomePage({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const [settings, categories] = await Promise.all([
+  const [settings, categories, reach] = await Promise.all([
     getSettings(toSettingLocale(locale)),
     getTradeCategories(toSettingLocale(locale)),
+    getReachLocations(toSettingLocale(locale)),
   ]);
 
   return (
@@ -28,7 +30,7 @@ export default async function HomePage({
       <TrustMarquee />
       <Intro />
       <Categories items={categories} />
-      <WorldReach />
+      <WorldReach items={reach} />
       <Process />
       <Why />
       <CtaBand />

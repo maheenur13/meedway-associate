@@ -290,7 +290,8 @@
     "title": "Workers deployed across the Gulf and Asia",
     "subtitle": "{company} supplies skilled and general workers to employers throughout these markets.",
     "workers": "workers",
-    "hq": "Head Office · Dhaka"
+    "hq": "Head Office · Dhaka",
+  "hqCountry": "Bangladesh"
   },
   "trust": {
     "baira": "BAIRA Member",

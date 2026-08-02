@@ -77,6 +77,30 @@ async function main() {
   } else {
     console.log(`Trade categories already present (${tradeCount}); skipping seed.`);
   }
+
+  // --- seed reach countries (only if empty) ---
+  // Mirrors the list the map shipped with. NOTE: these worker counts are the
+  // placeholders from the original hardcoded array and total 13,400, which
+  // contradicts the "5,000+ placed" hero stat — both need real figures.
+  const reachCount = await prisma.reachCountry.count();
+  if (reachCount === 0) {
+    const reach = [
+      { code: "my", nameEn: "Malaysia", nameBn: "মালয়েশিয়া", workers: 4500, pill: true },
+      { code: "sa", nameEn: "Saudi Arabia", nameBn: "সৌদি আরব", workers: 3300, pill: true },
+      { code: "ae", nameEn: "UAE", nameBn: "সংযুক্ত আরব আমিরাত", workers: 2000, pill: false },
+      { code: "om", nameEn: "Oman", nameBn: "ওমান", workers: 1000, pill: false },
+      { code: "qa", nameEn: "Qatar", nameBn: "কাতার", workers: 900, pill: false },
+      { code: "kw", nameEn: "Kuwait", nameBn: "কুয়েত", workers: 800, pill: false },
+      { code: "bh", nameEn: "Bahrain", nameBn: "বাহরাইন", workers: 500, pill: false },
+      { code: "jo", nameEn: "Jordan", nameBn: "জর্ডান", workers: 400, pill: false },
+    ];
+    for (const [i, c] of reach.entries()) {
+      await prisma.reachCountry.create({ data: { ...c, sortOrder: (i + 1) * 10 } });
+    }
+    console.log(`Seeded ${reach.length} reach countries.`);
+  } else {
+    console.log(`Reach countries already present (${reachCount}); skipping seed.`);
+  }
 }
 
 main()
