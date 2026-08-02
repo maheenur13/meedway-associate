@@ -28,9 +28,12 @@ export const siteConfig = {
     "Jordan",
   ],
   stats: {
-    placed: "5,000+", // TODO: confirm real figures
+    placed: "5,000+", // TODO: confirm with the client — not derivable from the DB
+    // Fallbacks only. Both of these are counted from published jobs at render
+    // time (see lib/settings.ts) and are used solely when the DB is
+    // unreachable or nothing is published yet.
     countries: "8",
-    deployed: "98%",
+    vacancies: "200+",
   },
   social: {
     facebook: "#",

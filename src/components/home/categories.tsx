@@ -1,38 +1,14 @@
 import { useTranslations } from "next-intl";
-import {
-  HardHat,
-  Factory,
-  Car,
-  SprayCan,
-  UtensilsCrossed,
-  Zap,
-  Wrench,
-  Flame,
-  HeartHandshake,
-  Users,
-  ArrowRight,
-  ArrowUpRight,
-} from "lucide-react";
-import type { LucideIcon } from "lucide-react";
+import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { Container } from "@/components/ui/container";
 import { SectionHeader } from "@/components/ui/section-header";
 import { Reveal } from "@/components/ui/reveal";
 import { Link } from "@/i18n/navigation";
+import { tradeIcon } from "@/lib/trade-icons";
+import type { TradeCategoryItem } from "@/lib/trade-categories";
 
-const items: { key: string; icon: LucideIcon }[] = [
-  { key: "construction", icon: HardHat },
-  { key: "factory", icon: Factory },
-  { key: "drivers", icon: Car },
-  { key: "cleaners", icon: SprayCan },
-  { key: "hospitality", icon: UtensilsCrossed },
-  { key: "electricians", icon: Zap },
-  { key: "plumbers", icon: Wrench },
-  { key: "welders", icon: Flame },
-  { key: "caregivers", icon: HeartHandshake },
-  { key: "general", icon: Users },
-];
-
-export function Categories() {
+/** `items` comes from the DB (admin → Trades), already localized. */
+export function Categories({ items }: { items: TradeCategoryItem[] }) {
   const t = useTranslations("categories");
 
   return (
@@ -46,9 +22,9 @@ export function Categories() {
 
         <div className="mt-12 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
           {items.map((item, i) => {
-            const Icon = item.icon;
+            const Icon = tradeIcon(item.icon);
             return (
-              <Reveal key={item.key} delay={i % 4} as="div">
+              <Reveal key={item.id} delay={i % 4} as="div">
                 <Link
                   href="/jobs"
                   className="group relative flex h-full flex-col justify-between overflow-hidden rounded-2xl border border-line bg-paper-2 p-5 transition-all duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-[0_14px_34px_-16px_rgba(48,40,120,0.4)]"
@@ -58,7 +34,7 @@ export function Categories() {
                     <Icon className="h-5 w-5" />
                   </span>
                   <span className="mt-8 flex items-center justify-between font-medium">
-                    {t(`items.${item.key}`)}
+                    {item.name}
                     <ArrowUpRight className="h-4 w-4 -translate-x-1 text-accent opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100" />
                   </span>
                 </Link>

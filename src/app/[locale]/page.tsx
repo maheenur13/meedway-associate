@@ -1,5 +1,6 @@
 import { setRequestLocale } from "next-intl/server";
 import { getSettings, toSettingLocale } from "@/lib/settings";
+import { getTradeCategories } from "@/lib/trade-categories";
 import { Hero } from "@/components/home/hero";
 import { TrustMarquee } from "@/components/home/trust-marquee";
 import { Intro } from "@/components/home/intro";
@@ -16,14 +17,17 @@ export default async function HomePage({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const settings = await getSettings(toSettingLocale(locale));
+  const [settings, categories] = await Promise.all([
+    getSettings(toSettingLocale(locale)),
+    getTradeCategories(toSettingLocale(locale)),
+  ]);
 
   return (
     <>
       <Hero settings={settings} />
       <TrustMarquee />
       <Intro />
-      <Categories />
+      <Categories items={categories} />
       <WorldReach />
       <Process />
       <Why />

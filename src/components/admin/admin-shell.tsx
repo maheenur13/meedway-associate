@@ -8,6 +8,7 @@ import {
   TeamOutlined,
   BankOutlined,
   MailOutlined,
+  AppstoreOutlined,
   SettingOutlined,
   MenuOutlined,
   LogoutOutlined,
@@ -22,6 +23,7 @@ const { Header, Sider, Content } = Layout;
 const items = [
   { key: "/admin", icon: <DashboardOutlined />, label: "Dashboard" },
   { key: "/admin/jobs", icon: <SolutionOutlined />, label: "Jobs" },
+  { key: "/admin/trades", icon: <AppstoreOutlined />, label: "Trades" },
   { key: "/admin/applications", icon: <TeamOutlined />, label: "Applications" },
   { key: "/admin/requests", icon: <BankOutlined />, label: "Worker Requests" },
   { key: "/admin/messages", icon: <MailOutlined />, label: "Messages" },

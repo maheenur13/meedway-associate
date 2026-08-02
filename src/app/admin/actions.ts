@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { signOut } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { SETTING_KEYS } from "@/lib/settings-fields";
+import { TRADE_ICON_NAMES, DEFAULT_TRADE_ICON } from "@/lib/trade-icons";
 
 export async function signOutAction() {
   await signOut({ redirectTo: "/admin/login" });
@@ -63,6 +64,55 @@ export async function removeJob(id: string) {
 export async function setJobPublished(id: string, published: boolean) {
   await prisma.job.update({ where: { id }, data: { published } });
   revalidateJobs();
+  return { ok: true };
+}
+
+export type TradeCategoryInput = {
+  id?: string;
+  nameEn: string;
+  nameBn: string;
+  icon: string;
+  sortOrder: number;
+  published: boolean;
+};
+
+function revalidateTrades() {
+  revalidatePath("/admin/trades");
+  revalidatePath("/", "layout");
+}
+
+export async function upsertTradeCategory(input: TradeCategoryInput) {
+  const nameEn = input.nameEn.trim();
+  if (!nameEn) return { ok: false, error: "An English name is required." };
+
+  const data = {
+    nameEn,
+    nameBn: input.nameBn.trim() || null,
+    // Reject unknown icon names here rather than letting a bad value reach the
+    // public grid, where it would silently render the fallback icon.
+    icon: TRADE_ICON_NAMES.includes(input.icon) ? input.icon : DEFAULT_TRADE_ICON,
+    sortOrder: Number.isFinite(input.sortOrder) ? Math.trunc(input.sortOrder) : 0,
+    published: input.published,
+  };
+
+  if (input.id) {
+    await prisma.tradeCategory.update({ where: { id: input.id }, data });
+  } else {
+    await prisma.tradeCategory.create({ data });
+  }
+  revalidateTrades();
+  return { ok: true };
+}
+
+export async function removeTradeCategory(id: string) {
+  await prisma.tradeCategory.delete({ where: { id } });
+  revalidateTrades();
+  return { ok: true };
+}
+
+export async function setTradeCategoryPublished(id: string, published: boolean) {
+  await prisma.tradeCategory.update({ where: { id }, data: { published } });
+  revalidateTrades();
   return { ok: true };
 }
 

@@ -51,6 +51,32 @@ async function main() {
   } else {
     console.log(`Jobs already present (${count}); skipping seed.`);
   }
+
+  // --- seed trade categories (only if empty) ---
+  // Mirrors the list the site shipped with, so the admin panel opens on the
+  // real grid instead of an empty table. Bengali names come from messages/bn.json.
+  const tradeCount = await prisma.tradeCategory.count();
+  if (tradeCount === 0) {
+    const trades = [
+      { nameEn: "Construction", nameBn: "নির্মাণ", icon: "HardHat" },
+      { nameEn: "Factory", nameBn: "কারখানা", icon: "Factory" },
+      { nameEn: "Drivers", nameBn: "ড্রাইভার", icon: "Car" },
+      { nameEn: "Cleaners", nameBn: "ক্লিনার", icon: "SprayCan" },
+      { nameEn: "Hotel & restaurant", nameBn: "হোটেল ও রেস্টুরেন্ট", icon: "UtensilsCrossed" },
+      { nameEn: "Electricians", nameBn: "ইলেকট্রিশিয়ান", icon: "Zap" },
+      { nameEn: "Plumbers", nameBn: "প্লাম্বার", icon: "Wrench" },
+      { nameEn: "Welders", nameBn: "ওয়েল্ডার", icon: "Flame" },
+      { nameEn: "Caregivers", nameBn: "কেয়ারগিভার", icon: "HeartHandshake" },
+      { nameEn: "General workers", nameBn: "সাধারণ কর্মী", icon: "Users" },
+    ];
+    for (const [i, t] of trades.entries()) {
+      // Gaps of 10 so items can be reordered without renumbering the rest.
+      await prisma.tradeCategory.create({ data: { ...t, sortOrder: (i + 1) * 10 } });
+    }
+    console.log(`Seeded ${trades.length} trade categories.`);
+  } else {
+    console.log(`Trade categories already present (${tradeCount}); skipping seed.`);
+  }
 }
 
 main()

@@ -19,6 +19,16 @@
   --panel: #0a1226;      /* always-dark band — deep navy (footer, CTA) */
   --panel-2: #131c33;    /* raised surface on panel */
   --panel-ink: #ffffff;  /* text on panel */
+  /* Accent for use ON the dark panel/hero banner. Deliberately NOT redefined
+     in .dark: those surfaces are dark in both themes, so the accent that sits
+     on them must not follow the page theme. The light-mode --accent (#302878)
+     on the hero scrim measures ~1.2:1 — invisible. This measures ~4.5:1. */
+  --accent-on-panel: #a9a1ef;
+  --accent-on-panel-soft: rgba(169, 161, 239, 0.16);
+  /* Highlight block behind white text on the banner. The deep brand indigo —
+     white on it measures 12.4:1, so the words carry even where the block
+     itself sits close in tone to the scrim behind it. */
+  --accent-on-panel-fill: #302878;
   --grid-line: rgba(48, 40, 120, 0.07);        /* faint base grid */
   --grid-line-strong: rgba(48, 40, 120, 0.26); /* lit around cursor */
   --radius: 12px;
@@ -55,6 +65,9 @@
   --color-accent: var(--accent);
   --color-accent-ink: var(--accent-ink);
   --color-accent-soft: var(--accent-soft);
+  --color-accent-on-panel: var(--accent-on-panel);
+  --color-accent-on-panel-soft: var(--accent-on-panel-soft);
+  --color-accent-on-panel-fill: var(--accent-on-panel-fill);
   --color-gold: var(--gold);
   --color-gold-soft: var(--gold-soft);
   --color-success: var(--success);

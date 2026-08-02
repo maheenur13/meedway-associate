@@ -1,5 +1,5 @@
 import { useTranslations } from "next-intl";
-import { ArrowRight, Users, Globe2, TrendingUp } from "lucide-react";
+import { ArrowRight, Users, Globe2, Briefcase } from "lucide-react";
 import { Container } from "@/components/ui/container";
 import { Button } from "@/components/ui/button";
 import { Reveal } from "@/components/ui/reveal";
@@ -17,7 +17,7 @@ export function Hero({ settings }: { settings: Settings }) {
   const stats = [
     { raw: settings.statPlaced, fallback: { value: 5000, suffix: "+" }, label: s("placed"), icon: Users },
     { raw: settings.statCountries, fallback: { value: 8, suffix: "" }, label: s("countries"), icon: Globe2 },
-    { raw: settings.statDeployed, fallback: { value: 98, suffix: "%" }, label: s("deployed"), icon: TrendingUp },
+    { raw: settings.statVacancies, fallback: { value: 200, suffix: "+" }, label: s("vacancies"), icon: Briefcase },
   ].map(({ raw, fallback, ...rest }) => ({ ...(splitStat(raw) ?? fallback), ...rest }));
 
   // Destination markets, in the order the banner cycles them. `lift` evens out
@@ -47,6 +47,7 @@ export function Hero({ settings }: { settings: Settings }) {
           className="pointer-events-none absolute inset-0 bg-gradient-to-r from-panel/90 via-panel/65 to-panel/20"
         />
 
+
         {/* Below lg the copy is full-width, so it has to sit above the
             slideshow's badge row. From lg the copy is left and the controls
             are bottom-right, and they no longer share horizontal space. */}
@@ -60,11 +61,18 @@ export function Hero({ settings }: { settings: Settings }) {
             </Reveal>
 
             <Reveal delay={1}>
-              <h1 className="font-display mt-6 text-[clamp(2.6rem,7vw,4.4rem)] font-semibold leading-[1.02] tracking-tighter-2 text-panel-ink">
+              {/* leading is looser than the site's usual 1.02 so the highlight
+                  block below clears the line above it — a padded inline box is
+                  taller than the line spacing at 1.02. */}
+              <h1 className="font-display mt-6 text-[clamp(2.6rem,7vw,4.4rem)] font-semibold leading-[1.32] tracking-tighter-2 text-panel-ink">
                 {t("titleA")}
                 <br />
                 {t("titleB")}{" "}
-                <span className="text-accent">{t("titleAccent")}</span>
+                {/* box-decoration-clone so the block wraps per line rather than
+                    stretching one box across the break on narrow screens. */}
+                <span className="box-decoration-clone inline-block rounded-xl bg-accent-on-panel-fill px-3 py-1.5 leading-none text-white sm:py-2">
+                  {t("titleAccent")}
+                </span>
               </h1>
             </Reveal>
 
@@ -102,7 +110,12 @@ export function Hero({ settings }: { settings: Settings }) {
             const Icon = stat.icon;
             return (
               <Reveal key={stat.label} delay={4 + i} as="div">
-                <div className="group relative overflow-hidden rounded-2xl border border-white/15 bg-panel/70 p-5 text-panel-ink backdrop-blur-md transition-all duration-300 hover:-translate-y-1">
+                {/* Page-surface card, not a panel one: these straddle the banner
+                    edge but sit mostly on the page below it, so they follow the
+                    same language as every other card on the site and invert with
+                    the theme. Kept at /85 + blur for the frosted look over the
+                    photo — opaque enough not to wash out against a bright sky. */}
+                <div className="group relative overflow-hidden rounded-2xl border border-line-2 bg-paper-2/85 p-5 backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:bg-paper-2/95 hover:shadow-[0_12px_40px_-12px_rgba(48,40,120,0.35)]">
                   {/* accent sheen that sweeps on hover */}
                   <div
                     aria-hidden
@@ -117,7 +130,9 @@ export function Hero({ settings }: { settings: Settings }) {
                   <dd className="font-display mt-4 text-4xl font-semibold tracking-tighter-2">
                     <CountUp value={stat.value} suffix={stat.suffix} />
                   </dd>
-                  <dt className="mt-1 text-sm text-panel-ink/70">{stat.label}</dt>
+                  {/* ink-soft, not ink-mute: at 14px over a frosted card the
+                      muted grey only reaches ~3.3:1. */}
+                  <dt className="mt-1 text-sm text-ink-soft">{stat.label}</dt>
                 </div>
               </Reveal>
             );

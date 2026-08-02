@@ -19,6 +19,47 @@ export { toSettingLocale };
 export type { Settings, SettingKey, SettingLocale };
 
 /**
+ * How many distinct countries have published openings right now.
+ *
+ * Deduped in JS rather than with Prisma's `distinct` so that admin-entered
+ * values differing only by case or padding ("Qatar" / "qatar ") count once.
+ *
+ * Returns 0 when the DB is unreachable or nothing is published, which the
+ * caller treats as "no answer" and falls back to the configured figure —
+ * a hero reading "0 countries served" would be worse than a stale number.
+ */
+const countJobCountries = cache(async (): Promise<number> => {
+  try {
+    const rows = await prisma.job.findMany({
+      where: { published: true },
+      select: { country: true },
+    });
+    return new Set(rows.map((r) => r.country?.trim().toLowerCase()).filter(Boolean)).size;
+  } catch {
+    return 0;
+  }
+});
+
+/**
+ * Total vacancies advertised across published jobs.
+ *
+ * Returns 0 on failure or when nothing is published, which the caller reads as
+ * "no answer" and replaces with the configured fallback — same reasoning as
+ * countJobCountries.
+ */
+const sumJobVacancies = cache(async (): Promise<number> => {
+  try {
+    const rows = await prisma.job.findMany({
+      where: { published: true },
+      select: { vacancies: true },
+    });
+    return rows.reduce((total, r) => total + (r.vacancies || 0), 0);
+  } catch {
+    return 0;
+  }
+});
+
+/**
  * Per-locale defaults. Localized copy comes from the translation files so the
  * Bengali site keeps Bengali defaults; the rest comes from siteConfig.
  */
@@ -30,6 +71,11 @@ async function getDefaults(locale: SettingLocale): Promise<Settings> {
   };
   let footerTagline = "";
   let hours = "Sun – Thu, 10am – 6pm";
+
+  const [liveCountries, liveVacancies] = await Promise.all([
+    countJobCountries(),
+    sumJobVacancies(),
+  ]);
 
   try {
     const t = await getTranslations({ locale });
@@ -59,8 +105,10 @@ async function getDefaults(locale: SettingLocale): Promise<Settings> {
     facebook: siteConfig.social.facebook,
     linkedin: siteConfig.social.linkedin,
     statPlaced: siteConfig.stats.placed,
-    statCountries: siteConfig.stats.countries,
-    statDeployed: siteConfig.stats.deployed,
+    // Counted from live listings; siteConfig is only the fallback. An
+    // admin-entered override still beats this, same as every other field.
+    statCountries: liveCountries > 0 ? String(liveCountries) : siteConfig.stats.countries,
+    statVacancies: liveVacancies > 0 ? String(liveVacancies) : siteConfig.stats.vacancies,
   };
 }
 

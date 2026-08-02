@@ -40,7 +40,7 @@
   "stats": {
     "placed": "Workers placed",
     "countries": "Countries served",
-    "deployed": "Deployment rate"
+    "vacancies": "Open vacancies"
   },
   "intro": {
     "eyebrow": "Who we are",

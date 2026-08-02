@@ -30,7 +30,7 @@ export type Settings = {
   linkedin: string;
   statPlaced: string;
   statCountries: string;
-  statDeployed: string;
+  statVacancies: string;
 };
 
 export type SettingKey = keyof Settings;
@@ -110,13 +110,19 @@ export const SETTING_FIELDS: FieldDef[] = [
     localized: false,
     hint: "Number with an optional suffix — e.g. 5,000+",
   },
-  { key: "statCountries", label: "Countries served", group: "stats", localized: false },
   {
-    key: "statDeployed",
-    label: "Deployment rate",
+    key: "statCountries",
+    label: "Countries served",
     group: "stats",
     localized: false,
-    hint: "e.g. 98%",
+    hint: "Leave blank to count countries with published jobs automatically.",
+  },
+  {
+    key: "statVacancies",
+    label: "Open vacancies",
+    group: "stats",
+    localized: false,
+    hint: "Leave blank to total the vacancies on published jobs automatically.",
   },
 ];
 
