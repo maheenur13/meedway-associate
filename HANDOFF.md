@@ -164,6 +164,14 @@ for collages. Serves quality 90 (see gotcha #5).
 9. **Watch horizontal scroll** on any absolute/translated element; `html`/`body`
    have `overflow-x: hidden` but verify (docW == vw) after layout changes.
 10. Respect `prefers-reduced-motion` (aurora, marquee, floaty already do).
+11. **Restart `next dev` after any Prisma schema change.** `src/lib/prisma.ts`
+    caches the client on `globalThis` in dev so hot reloads don't open new pools —
+    which means the instance created at boot survives every HMR cycle *and*
+    `prisma generate`. Add a model, and the running server keeps a client that has
+    never heard of it: `Cannot read properties of undefined (reading 'findMany')`.
+    Regenerating does not help; only killing the process does. Symptom to watch
+    for: the public page silently shows its fallback data while an admin page
+    throws, because the readers in `lib/` catch and fall back but admin pages don't.
 
 ---
 

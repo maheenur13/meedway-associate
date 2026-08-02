@@ -22,4 +22,8 @@ function createClient() {
 
 export const prisma = globalForPrisma.prisma ?? createClient();
 
+// Cached across hot reloads so dev doesn't leak connection pools. Note the
+// trade-off: this instance outlives `prisma generate`, so after a schema change
+// the running dev server still holds a client without the new model and calls
+// on it fail with "Cannot read properties of undefined". Restart `next dev`.
 if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
