@@ -19,7 +19,7 @@ type Recent = {
 };
 
 const cardsMeta = [
-  { key: "jobs", label: "Jobs", href: "/admin/jobs", icon: <SolutionOutlined />, color: "#1d4ed8", bg: "#e7edfd" },
+  { key: "jobs", label: "Jobs", href: "/admin/jobs", icon: <SolutionOutlined />, color: "#302878", bg: "#e9e7f7" },
   { key: "applications", label: "Applications", href: "/admin/applications", icon: <TeamOutlined />, color: "#0f766e", bg: "#d9f2ee" },
   { key: "requests", label: "Worker Requests", href: "/admin/requests", icon: <BankOutlined />, color: "#b45309", bg: "#fbecd6" },
   { key: "messages", label: "Messages", href: "/admin/messages", icon: <MailOutlined />, color: "#7c3aed", bg: "#eee7fd" },

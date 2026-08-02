@@ -29,7 +29,7 @@ export default async function AdminLoginPage() {
               alignItems: "center",
               justifyContent: "center",
               borderRadius: 12,
-              background: "#1d4ed8",
+              background: "#302878",
               color: "#fff",
               fontWeight: 700,
               fontSize: 18,

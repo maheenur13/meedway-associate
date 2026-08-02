@@ -10,7 +10,12 @@
       "Bash(pnpm dev)",
       "Bash(pnpm build)",
       "Bash(pnpm lint)",
-      "Bash(pnpm exec tsc --noEmit)"
+      "Bash(pnpm exec tsc --noEmit)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code} -> %{redirect_url}\\\\n\" \"http://localhost:3000/en\")",
+      "Bash(curl -sL \"http://localhost:3000/en\")",
+      "Bash(sed -i 's/rgba\\(29, *78, *216, *0\\\\.4\\)/rgba\\(48,40,120,0.4\\)/g; s/rgba\\(29, *78, *216, *0\\\\.40\\)/rgba\\(48,40,120,0.40\\)/g' src/components/home/categories.tsx src/components/site/aurora-background.tsx)",
+      "Bash(sed -i 's/#1d4ed8/#302878/g; s/#e7edfd/#e9e7f7/g' src/app/admin/login/page.tsx src/components/admin/admin-shell.tsx src/components/admin/dashboard-view.tsx src/components/admin/providers.tsx)",
+      "WebFetch(domain:unsplash.com)"
     ]
   },
   "enabledMcpjsonServers": [

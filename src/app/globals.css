@@ -9,9 +9,9 @@
   --ink-mute: #8a8a8a;   /* muted text */
   --line: #ececec;       /* hairline borders */
   --line-2: #dcdcd8;     /* stronger borders */
-  --accent: #1d4ed8;     /* royal blue (brand) */
+  --accent: #302878;     /* indigo — taken from the logo's wordmark ring */
   --accent-ink: #ffffff; /* text on accent */
-  --accent-soft: #e7edfd;/* accent tint bg */
+  --accent-soft: #e9e7f7;/* accent tint bg */
   --gold: #c9a227;       /* brand gold (secondary accent) */
   --gold-soft: #f7efd6;  /* gold tint bg */
   --success: #2e9e6b;    /* status: ok */
@@ -19,8 +19,8 @@
   --panel: #0a1226;      /* always-dark band — deep navy (footer, CTA) */
   --panel-2: #131c33;    /* raised surface on panel */
   --panel-ink: #ffffff;  /* text on panel */
-  --grid-line: rgba(29, 78, 216, 0.07);        /* faint base grid */
-  --grid-line-strong: rgba(29, 78, 216, 0.26); /* lit around cursor */
+  --grid-line: rgba(48, 40, 120, 0.07);        /* faint base grid */
+  --grid-line-strong: rgba(48, 40, 120, 0.26); /* lit around cursor */
   --radius: 12px;
 }
 
@@ -32,16 +32,16 @@
   --ink-mute: #7e838d;
   --line: rgba(255, 255, 255, 0.09);
   --line-2: rgba(255, 255, 255, 0.16);
-  --accent: #60a5fa;     /* lighter royal blue reads better on dark */
+  --accent: #958de2;     /* lighter tint of the logo indigo — reads on dark */
   --accent-ink: #0b0d10;
-  --accent-soft: rgba(96, 165, 250, 0.15);
+  --accent-soft: rgba(149, 141, 226, 0.15);
   --gold: #e3c15a;       /* brighter gold on dark */
   --gold-soft: rgba(227, 193, 90, 0.14);
   --panel: #070c18;
   --panel-2: #121a2e;
   --panel-ink: #f3f4f6;
-  --grid-line: rgba(96, 165, 250, 0.08);
-  --grid-line-strong: rgba(96, 165, 250, 0.32);
+  --grid-line: rgba(149, 141, 226, 0.08);
+  --grid-line-strong: rgba(149, 141, 226, 0.32);
 }
 
 @theme inline {

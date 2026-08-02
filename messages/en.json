@@ -21,7 +21,21 @@
     "titleAccent": "worldwide.",
     "subtitle": "The overseas recruitment partner for companies hiring construction, factory, hospitality, and technical workers — sourced, screened, and deployed.",
     "ctaJobs": "View available jobs",
-    "ctaRequest": "Request workers"
+    "ctaRequest": "Request workers",
+    "slides": {
+      "dubai": {
+        "city": "Dubai, UAE",
+        "alt": "Skyline of high-rise towers under construction in Dubai's Business Bay"
+      },
+      "malaysia": {
+        "city": "Kuala Lumpur, Malaysia",
+        "alt": "Aerial view of the Kuala Lumpur city skyline in daylight"
+      },
+      "saudi": {
+        "city": "Riyadh, Saudi Arabia",
+        "alt": "Riyadh cityscape with the Kingdom Centre tower and modern high-rises"
+      }
+    }
   },
   "stats": {
     "placed": "Workers placed",

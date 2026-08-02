@@ -51,7 +51,7 @@ export function Categories() {
               <Reveal key={item.key} delay={i % 4} as="div">
                 <Link
                   href="/jobs"
-                  className="group relative flex h-full flex-col justify-between overflow-hidden rounded-2xl border border-line bg-paper-2 p-5 transition-all duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-[0_14px_34px_-16px_rgba(29,78,216,0.4)]"
+                  className="group relative flex h-full flex-col justify-between overflow-hidden rounded-2xl border border-line bg-paper-2 p-5 transition-all duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-[0_14px_34px_-16px_rgba(48,40,120,0.4)]"
                 >
                   <span className="absolute inset-x-0 top-0 h-0.5 origin-left scale-x-0 bg-accent transition-transform duration-300 group-hover:scale-x-100" />
                   <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-accent-soft text-accent transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:scale-105">

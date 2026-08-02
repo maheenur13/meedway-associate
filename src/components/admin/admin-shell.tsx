@@ -56,7 +56,7 @@ function SideNav({
             alignItems: "center",
             justifyContent: "center",
             borderRadius: 8,
-            background: "#1d4ed8",
+            background: "#302878",
             fontWeight: 700,
           }}
         >

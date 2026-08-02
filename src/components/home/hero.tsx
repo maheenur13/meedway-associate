@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Reveal } from "@/components/ui/reveal";
 import { CountUp } from "@/components/ui/count-up";
 import { HeroMotion } from "./hero-motion";
+import { HeroSlideshow, type HeroSlide } from "./hero-slideshow";
 import { splitStat, type Settings } from "@/lib/settings-fields";
 
 export function Hero({ settings }: { settings: Settings }) {
@@ -19,56 +20,89 @@ export function Hero({ settings }: { settings: Settings }) {
     { raw: settings.statDeployed, fallback: { value: 98, suffix: "%" }, label: s("deployed"), icon: TrendingUp },
   ].map(({ raw, fallback, ...rest }) => ({ ...(splitStat(raw) ?? fallback), ...rest }));
 
+  // Destination markets, in the order the banner cycles them. `lift` evens out
+  // the different shooting conditions so the cross-fade doesn't flicker —
+  // see HeroSlide for the measured luminances.
+  const slides: HeroSlide[] = [
+    { key: "dubai", src: "/photos/hero/skyline-dubai.jpg" },
+    { key: "malaysia", src: "/photos/hero/skyline-malaysia.jpg", lift: 1.1 },
+    { key: "saudi", src: "/photos/hero/skyline-saudi.jpg", lift: 1.18 },
+  ].map(({ key, ...rest }) => ({
+    ...rest,
+    city: t(`slides.${key}.city`),
+    alt: t(`slides.${key}.alt`),
+  }));
+
   return (
-    <section className="relative overflow-hidden pt-10 pb-16 sm:pt-16">
-      {/* soft accent glow */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -top-40 right-0 h-[420px] w-[420px] rounded-full bg-accent/10 blur-[120px]"
-      />
+    <section className="relative pb-16">
+     <HeroMotion>
+      {/* Full-bleed skyline banner with the headline sitting on top of it. */}
+      <div className="relative h-[clamp(440px,64vh,620px)] w-full overflow-hidden">
+        <HeroSlideshow slides={slides} />
+
+        {/* Scrim: heavy on the left so the headline stays legible, clearing to
+            the right so the skyline still reads. */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 bg-gradient-to-r from-panel/90 via-panel/65 to-panel/20"
+        />
+
+        {/* Below lg the copy is full-width, so it has to sit above the
+            slideshow's badge row. From lg the copy is left and the controls
+            are bottom-right, and they no longer share horizontal space. */}
+        <Container className="relative flex h-full items-center pb-14 lg:pb-0">
+          <div className="max-w-2xl">
+            <Reveal>
+              <span className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-3 py-1.5 text-xs text-panel-ink backdrop-blur-sm">
+                <span className="h-1.5 w-1.5 rounded-full bg-gold" />
+                {t("badge", { licence: settings.licence })}
+              </span>
+            </Reveal>
+
+            <Reveal delay={1}>
+              <h1 className="font-display mt-6 text-[clamp(2.6rem,7vw,4.4rem)] font-semibold leading-[1.02] tracking-tighter-2 text-panel-ink">
+                {t("titleA")}
+                <br />
+                {t("titleB")}{" "}
+                <span className="text-accent">{t("titleAccent")}</span>
+              </h1>
+            </Reveal>
+
+            <Reveal delay={2}>
+              <p className="mt-6 max-w-xl text-lg leading-relaxed text-panel-ink/80">
+                {t("subtitle")}
+              </p>
+            </Reveal>
+
+            <Reveal delay={3}>
+              <div className="mt-8 flex flex-wrap items-center gap-3">
+                <Button href="/jobs" variant="primary" size="lg">
+                  {t("ctaJobs")} <ArrowRight className="h-4 w-4" />
+                </Button>
+                <Button
+                  href="/request-workers"
+                  variant="outline"
+                  size="lg"
+                  className="border-white/30 text-panel-ink hover:bg-white/10"
+                >
+                  {t("ctaRequest")}
+                </Button>
+              </div>
+            </Reveal>
+          </div>
+        </Container>
+      </div>
+
       <Container>
-       <HeroMotion>
-        <div className="max-w-3xl">
-          <Reveal>
-            <span className="inline-flex items-center gap-2 rounded-full border border-line-2 bg-paper-2 px-3 py-1.5 text-xs text-ink-soft">
-              <span className="h-1.5 w-1.5 rounded-full bg-gold" />
-              {t("badge", { licence: settings.licence })}
-            </span>
-          </Reveal>
-
-          <Reveal delay={1}>
-            <h1 className="font-display mt-6 text-[clamp(2.6rem,7vw,4.4rem)] font-semibold leading-[1.02] tracking-tighter-2">
-              {t("titleA")}
-              <br />
-              {t("titleB")}{" "}
-              <span className="text-accent">{t("titleAccent")}</span>
-            </h1>
-          </Reveal>
-
-          <Reveal delay={2}>
-            <p className="mt-6 max-w-xl text-lg leading-relaxed text-ink-soft">
-              {t("subtitle")}
-            </p>
-          </Reveal>
-
-          <Reveal delay={3}>
-            <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Button href="/jobs" variant="primary" size="lg">
-                {t("ctaJobs")} <ArrowRight className="h-4 w-4" />
-              </Button>
-              <Button href="/request-workers" variant="outline" size="lg">
-                {t("ctaRequest")}
-              </Button>
-            </div>
-          </Reveal>
-        </div>
-
-        <dl className="mt-16 grid max-w-3xl grid-cols-1 gap-4 sm:grid-cols-3">
+        {/* From lg the cards straddle the bottom edge of the banner. Below that
+            they sit under it — floated, a full-width card lands on top of the
+            slideshow's badge and progress bars. */}
+        <dl className="relative z-10 mt-8 grid max-w-4xl grid-cols-1 gap-4 sm:grid-cols-3 lg:-mt-12">
           {stats.map((stat, i) => {
             const Icon = stat.icon;
             return (
               <Reveal key={stat.label} delay={4 + i} as="div">
-                <div className="group relative overflow-hidden rounded-2xl border border-line-2 bg-paper-2/55 p-5 backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:bg-paper-2/75 hover:shadow-[0_12px_40px_-12px_rgba(29,78,216,0.35)]">
+                <div className="group relative overflow-hidden rounded-2xl border border-white/15 bg-panel/70 p-5 text-panel-ink backdrop-blur-md transition-all duration-300 hover:-translate-y-1">
                   {/* accent sheen that sweeps on hover */}
                   <div
                     aria-hidden
@@ -83,14 +117,14 @@ export function Hero({ settings }: { settings: Settings }) {
                   <dd className="font-display mt-4 text-4xl font-semibold tracking-tighter-2">
                     <CountUp value={stat.value} suffix={stat.suffix} />
                   </dd>
-                  <dt className="mt-1 text-sm text-ink-mute">{stat.label}</dt>
+                  <dt className="mt-1 text-sm text-panel-ink/70">{stat.label}</dt>
                 </div>
               </Reveal>
             );
           })}
         </dl>
-       </HeroMotion>
       </Container>
+     </HeroMotion>
     </section>
   );
 }

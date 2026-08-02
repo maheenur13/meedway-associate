@@ -9,8 +9,8 @@ export function AdminProviders({ children }: { children: ReactNode }) {
       theme={{
         algorithm: antdTheme.defaultAlgorithm,
         token: {
-          colorPrimary: "#1d4ed8",
-          colorLink: "#1d4ed8",
+          colorPrimary: "#302878",
+          colorLink: "#302878",
           borderRadius: 8,
           fontFamily:
             "var(--font-inter), system-ui, -apple-system, sans-serif",
@@ -24,7 +24,7 @@ export function AdminProviders({ children }: { children: ReactNode }) {
           Menu: {
             darkItemBg: "#0f1115",
             darkSubMenuItemBg: "#0f1115",
-            darkItemSelectedBg: "#1d4ed8",
+            darkItemSelectedBg: "#302878",
           },
         },
       }}
