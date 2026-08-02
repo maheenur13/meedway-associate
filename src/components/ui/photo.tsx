@@ -85,12 +85,19 @@ export function Photo({
           />
           {overlay && (
             <>
+              {/*
+                Opacities here are tuned to --accent's weight. They were set for
+                the old royal blue (#1d4ed8); the brand indigo that replaced it
+                is ~3x darker, so the same values buried the photograph. Scaled
+                back to roughly match the original perceived strength — if the
+                accent ever changes again, re-check these.
+              */}
               {/* brand-navy depth gradient (also aids caption legibility) */}
-              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-panel/45 via-transparent to-transparent" />
-              {/* cinematic brand colour-blend (blue in shadows, gold highlight) */}
-              <div className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-accent/60 via-accent/15 to-gold/25 mix-blend-overlay transition-opacity duration-500 group-hover:opacity-60" />
-              {/* light blue brand tint that clears on hover for full clarity */}
-              <div className="pointer-events-none absolute inset-0 bg-accent/10 opacity-100 transition-opacity duration-500 group-hover:opacity-0" />
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-panel/35 via-transparent to-transparent" />
+              {/* cinematic brand colour-blend (indigo in shadows, gold highlight) */}
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-accent/30 via-accent/8 to-gold/18 mix-blend-overlay transition-opacity duration-500 group-hover:opacity-50" />
+              {/* light brand tint that clears on hover for full clarity */}
+              <div className="pointer-events-none absolute inset-0 bg-accent/5 opacity-100 transition-opacity duration-500 group-hover:opacity-0" />
               {/* soft light sweep that crosses the image on hover */}
               <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-[inherit]">
                 <div className="absolute inset-y-0 -left-3/4 w-1/2 -skew-x-12 bg-gradient-to-r from-transparent via-white/25 to-transparent transition-transform duration-700 ease-out group-hover:translate-x-[280%]" />
