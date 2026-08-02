@@ -24,7 +24,16 @@ export function PageHeader({
       }}
     >
       <div>
-        <Typography.Title level={3} style={{ margin: 0, fontWeight: 600 }}>
+        {/* Sora + tight tracking, matching the public site's headings. */}
+        <Typography.Title
+          level={3}
+          style={{
+            margin: 0,
+            fontWeight: 600,
+            fontFamily: "var(--font-sora), var(--font-inter), sans-serif",
+            letterSpacing: "-0.02em",
+          }}
+        >
           {title}
         </Typography.Title>
         {subtitle && (

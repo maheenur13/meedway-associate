@@ -48,27 +48,48 @@ function SideNav({
           display: "flex",
           alignItems: "center",
           gap: 10,
-          padding: "18px 20px",
+          padding: "18px 18px 16px",
           color: "#fff",
+          borderBottom: "1px solid rgba(255,255,255,0.08)",
+          marginBottom: 8,
         }}
       >
-        <span
-          style={{
-            display: "inline-flex",
-            height: 30,
-            width: 30,
-            alignItems: "center",
-            justifyContent: "center",
-            borderRadius: 8,
-            background: "#302878",
-            fontWeight: 700,
-          }}
-        >
-          {brandName?.trim().charAt(0).toUpperCase() || "M"}
-        </span>
-        <span style={{ fontWeight: 600, fontSize: 15 }}>
-          {brandName ? `${brandName} Admin` : "Admin"}
-        </span>
+        {/* The real company mark, not an initial in a box. */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/photos/logo-mark.png"
+          alt=""
+          width={30}
+          height={30}
+          style={{ flexShrink: 0 }}
+        />
+        {/* minWidth:0 lets the name actually truncate inside the flex row —
+            "Meed Associate Ltd Admin" used to wrap onto two ragged lines. */}
+        <div style={{ minWidth: 0, lineHeight: 1.2 }}>
+          <div
+            style={{
+              fontWeight: 600,
+              fontSize: 14,
+              whiteSpace: "nowrap",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+            }}
+            title={brandName}
+          >
+            {brandName || "Meed Associate"}
+          </div>
+          <div
+            style={{
+              fontSize: 11,
+              letterSpacing: "0.08em",
+              textTransform: "uppercase",
+              color: "rgba(255,255,255,0.45)",
+              marginTop: 2,
+            }}
+          >
+            Admin
+          </div>
+        </div>
       </div>
       <Menu
         theme="dark"
@@ -122,7 +143,7 @@ export function AdminShell({
   return (
     <Layout style={{ minHeight: "100vh" }}>
       {!isMobile && (
-        <Sider width={232} style={{ background: "#0f1115" }}>
+        <Sider width={232} style={{ background: "#0a1226" }}>
           <SideNav
             selectedKey={selectedKey}
             onNavigate={navigate}
@@ -137,7 +158,7 @@ export function AdminShell({
           open={drawerOpen}
           onClose={() => setDrawerOpen(false)}
           styles={{
-            body: { padding: 0, background: "#0f1115" },
+            body: { padding: 0, background: "#0a1226" },
             header: { display: "none" },
             wrapper: { width: 240 },
           }}
@@ -169,7 +190,11 @@ export function AdminShell({
               aria-label="Open menu"
             />
           )}
-          <div style={{ flex: 1, fontWeight: 600 }}>Admin</div>
+          {/* Name the page you're on — "Admin" told you nothing you didn't
+              already know from the sidebar. */}
+          <div style={{ flex: 1, fontWeight: 600, fontSize: 15 }}>
+            {items.find((i) => i.key === selectedKey)?.label ?? "Admin"}
+          </div>
           <Dropdown menu={userMenu} trigger={["click"]}>
             <Button type="text" style={{ display: "flex", alignItems: "center", gap: 8 }}>
               <Avatar size="small" icon={<UserOutlined />} />
@@ -179,7 +204,9 @@ export function AdminShell({
             </Button>
           </Dropdown>
         </Header>
-        <Content style={{ padding: isMobile ? 16 : 24, background: "#f0f2f5" }}>
+        {/* Background comes from the theme's colorBgLayout rather than being
+            hardcoded, so it stays in step with the token set. */}
+        <Content style={{ padding: isMobile ? 16 : 28 }}>
           <div style={{ maxWidth: 1140, margin: "0 auto" }}>{children}</div>
         </Content>
       </Layout>
