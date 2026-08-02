@@ -13,9 +13,10 @@ Recommended: 1600×1067 px or larger.
 - `office-1.jpg`  — main office shot (used on the home "Who we are" section + About hero)
 - `office-2.jpg`  — optional second office/reception shot (About page)
 
-## team/  (square, 1:1 for headshots)
-Recommended: 800×800 px, face centered.
-- `md.jpg`         — Managing Director (Shafiqul Haider Bhuiyan)
+## team/  (portrait, 4:5 for headshots)
+Recommended: 1000×1250 px, face centered. Rendered with `overlay={false}`
+so the brand colour-blend doesn't discolour skin tones.
+- `founder.jpeg`   — Managing Director (Shafiqul Haider Bhuiyan), About → leadership
 - `team-1.jpg` … `team-4.jpg` — team member headshots (About page)
 
 ## process/  (landscape, ~3:2)

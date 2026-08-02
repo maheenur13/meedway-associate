@@ -28,8 +28,15 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  const t = await getTranslations({ locale, namespace: "about" });
-  return { title: t("eyebrow"), description: t("intro") };
+  const [t, settings] = await Promise.all([
+    getTranslations({ locale, namespace: "about" }),
+    getSettings(toSettingLocale(locale)),
+  ]);
+  // `about.intro` carries ICU placeholders — metadata must supply them too.
+  return {
+    title: t("eyebrow"),
+    description: t("intro", { company: settings.name, licence: settings.licence }),
+  };
 }
 
 const values: { key: string; icon: LucideIcon }[] = [
@@ -138,10 +145,12 @@ function AboutContent({ settings }: { settings: Settings }) {
           <div className="grid items-center gap-10 lg:grid-cols-[0.8fr_1.2fr]">
             <Reveal>
               <Photo
-                src="/photos/team/md.jpg"
+                src="/photos/team/founder.png"
                 alt={settings.md}
                 ratio="4 / 5"
                 caption={settings.md}
+                sizes="(max-width: 1024px) 100vw, 480px"
+                overlay={false}
               />
             </Reveal>
             <div>

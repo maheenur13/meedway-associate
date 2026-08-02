@@ -7,7 +7,11 @@ import { JobsBrowser } from "@/components/jobs/jobs-browser";
 import { prisma } from "@/lib/prisma";
 import type { Job } from "@/lib/jobs-data";
 
-export const dynamic = "force-dynamic";
+// Job listings change rarely, so this page is prerendered like the rest of the
+// public site. The admin actions call revalidatePath("/", "layout") on every
+// job edit, so changes show up immediately; the hourly window is only a safety
+// net for rows changed outside the panel (e.g. straight in the DB).
+export const revalidate = 3600;
 
 async function getJobs(): Promise<Job[]> {
   const rows = await prisma.job.findMany({

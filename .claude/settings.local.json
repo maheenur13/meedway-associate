@@ -4,7 +4,17 @@
       "mcp__visualize__show_widget",
       "Bash(cd \"C:\\\\Users\\\\jahid\\\\Desktop\\\\meedway-overseas\" && rm -f src/app/page.tsx && mkdir -p \"src/app/[locale]\" && echo done)",
       "Bash(npm view *)",
-      "WebSearch"
+      "WebSearch",
+      "mcp__playwright",
+      "mcp__chrome-devtools",
+      "Bash(pnpm dev)",
+      "Bash(pnpm build)",
+      "Bash(pnpm lint)",
+      "Bash(pnpm exec tsc --noEmit)"
     ]
-  }
+  },
+  "enabledMcpjsonServers": [
+    "playwright",
+    "chrome-devtools"
+  ]
 }
