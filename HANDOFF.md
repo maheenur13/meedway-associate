@@ -27,8 +27,16 @@ whitespace, big type, one primary accent + a secondary accent, subtle motion.
 - **Primary markets:** Malaysia & Saudi Arabia (also UAE, Qatar, Kuwait, Oman, Bahrain, Jordan)
 
 **Still TODO from the client (placeholders in place):** year established,
-official email, phone, WhatsApp number, a clean logo asset (SVG/transparent PNG),
-team + MD headshots, real job listings.
+official email, phone, WhatsApp number, team headshots, real job listings.
+(Logo received — `public/photos/logo.png`, transparent; the swirl is cropped out
+to `logo-mark.png` for the navbar/favicon.)
+
+⚠️ **Unverified public claims.** Three numbers on the site are invented and
+contradict each other — the hero says **5,000+ workers placed** while the reach
+map totals **13,400**. `statPlaced` is the only stat still hardcoded (nothing in
+the schema can derive it); countries and vacancies are now counted from live job
+data. Get real figures before go-live, or drop the claims. A licensed agency can
+be asked to substantiate these.
 
 ---
 
@@ -64,7 +72,7 @@ src/
   app/
     layout.tsx                 # root layout = pass-through (returns children only)
     not-found.tsx              # global fallback, renders its OWN <html>/<body>
-    icon.svg / apple-icon.svg  # favicon = gold plane on blue square
+    icon.png / apple-icon.png  # favicon = the logo swirl (see §9)
     globals.css                # Tailwind import + ALL theme tokens + keyframes
     [locale]/
       layout.tsx               # renders <html>/<body>, fonts, no-flash theme script, chrome
@@ -76,6 +84,12 @@ src/
   proxy.ts                     # next-intl middleware (Next 16 renamed middleware->proxy)
   lib/
     site-config.ts             # company details + whatsappLink()
+    settings.ts                # server-only CMS resolver (also counts live job stats)
+    settings-fields.ts         # SETTING_FIELDS — single source of truth for CMS keys
+    trade-categories.ts        # server-only: "What we provide" grid from DB
+    trade-icons.ts             # allowlist of lucide icons an admin may choose
+    reach.ts                   # server-only: map/legend countries from DB
+    reach-map.ts               # pin coordinates by country code (NOT in the DB — see §9)
     utils.ts                   # cn()
     use-media-query.ts         # useMediaQuery / useIsDesktop (gates heavy scroll anims)
   components/
@@ -83,8 +97,11 @@ src/
              whatsapp-button, aurora-background, scroll-progress
     ui/      button, container, section-header, reveal, accent-dash, parallax,
              count-up, photo
-    home/    hero, hero-motion, trust-marquee, intro, office-collage,
-             categories, process, why, cta-band
+    home/    hero, hero-motion, hero-parallax, hero-slideshow, trust-marquee,
+             intro, office-collage, categories, process, why, cta-band, world-reach
+    admin/   admin-shell, providers, page-header, dashboard-view, jobs-table,
+             trades-table, reach-table, applications-table, requests-table,
+             messages-view, settings-form, login-form
 messages/en.json  messages/bn.json   # all copy, both languages
 public/photos/{office,process,team}/ # images + README with expected filenames
 docs/REQUIREMENTS.md  docs/DESIGN_SYSTEM.md
@@ -96,7 +113,13 @@ docs/REQUIREMENTS.md  docs/DESIGN_SYSTEM.md
 
 Class-based dark mode: `.dark` on `<html>`. Tokens (light / dark):
 
-- `--accent` **royal blue** `#1d4ed8` / `#60a5fa` — primary (buttons, links, grid, aurora)
+- `--accent` **logo indigo** `#302878` / `#958de2` — primary (buttons, links, grid, aurora).
+  Taken from the logo's arched wordmark so the mark and the UI agree. It replaced
+  royal blue `#1d4ed8`, and is ~3× darker (luminance 0.108 → 0.035) — see gotcha #12.
+- `--accent-on-panel` `#a9a1ef`, `--accent-on-panel-soft`, `--accent-on-panel-fill` `#302878`
+  — accent for use ON dark panel surfaces. **Deliberately not redefined under `.dark`**:
+  those surfaces are dark in both themes, so their accent must not follow the page
+  theme. See gotcha #13.
 - `--gold` **brand gold** `#c9a227` / `#e3c15a` — secondary accent (small highlights, logo lettering, marquee ticks)
 - `--paper` / `--paper-2` — page / raised surfaces
 - `--ink` / `--ink-soft` / `--ink-mute` — text
@@ -118,7 +141,25 @@ so it flips correctly (bit us on buttons, logo, locale switcher).
 
 - **Aurora background** (`aurora-background.tsx`): blurred blue/gold blobs +
   cursor glow + cursor-lit line grid + film grain + hue drift + scroll parallax.
-- **Hero**: big headline, gold badge dot, frosted glass **stat cards with count-up**.
+- **Hero** (`hero.tsx` + `hero-slideshow.tsx` + `hero-parallax.tsx`): full-bleed
+  photo banner, headline over a left-heavy scrim, frosted **stat cards with count-up**
+  straddling the bottom edge (`lg:-mt-12`; below `lg` they sit under the banner —
+  full-width cards collide with the slideshow controls otherwise).
+  - **Carousel**: three destination skylines (Dubai / Kuala Lumpur / Riyadh), 6.5s
+    hold. Transition is a **clip-path wipe** with a gold hairline on the leading
+    edge — not a cross-fade, so no frame ever shows two ghosted photos. Slides never
+    unmount; only stacking order and the incoming slide's clip change (remounting
+    `<Image>` mid-transition risks a decode flash). Needs a two-phase state — set
+    the clip with transitions off, open it the next frame — plus a 200ms rAF
+    fallback, since browsers pause rAF in background tabs.
+  - Each slide carries a `lift` brightness value: the three photos were shot in
+    different light (mean luminance 163 / 132 / 118) and an uncorrected transition
+    reads as a brightness step.
+  - **Parallax**: photo drifts inside an overscanned frame. Travel must stay under
+    the overscan or an edge shows — see gotcha #14.
+  - The headline's accent word is white on an `--accent-on-panel-fill` block; that
+    forced `leading-[1.32]` (a padded inline box is taller than the line spacing at
+    the site's usual 1.02).
 - **Trust marquee**: infinite hover-to-pause strip of credentials (gold ticks).
 - **Office collage** (`office-collage.tsx`): the layered photo bento is the
   DEFAULT (rest) state; **as the section scrolls to centre, the photos detach
@@ -172,6 +213,32 @@ for collages. Serves quality 90 (see gotcha #5).
     Regenerating does not help; only killing the process does. Symptom to watch
     for: the public page silently shows its fallback data while an admin page
     throws, because the readers in `lib/` catch and fall back but admin pages don't.
+12. **Overlay opacities are coupled to `--accent`'s weight.** Changing the accent
+    from royal blue to the (3× darker) logo indigo silently buried every photo on
+    the site — `ui/photo.tsx` stacks three accent-tinted layers whose opacities were
+    tuned for the lighter colour. If the accent ever changes again, re-check those
+    numbers. Same class of bug: the admin AntD theme hardcodes the accent hex,
+    because AntD derives hover/active/border shades and cannot do that from a `var()`.
+13. **Dark surfaces need theme-independent accents.** `text-accent` on the hero
+    scrim measured **1.18:1** in light mode (invisible) because `--accent` is tuned
+    for the light *page*, while the banner is dark in *both* themes. Use
+    `accent-on-panel*` on anything sitting on `--panel` — banner, footer, CTA band.
+    Same trap in reverse: `bg-accent-soft` (near-white) on a dark card.
+14. **Parallax has two constraints, and they fight.** (a) Travel must stay inside
+    the wrapper's overscan or the photo's edge is exposed — `y` is a share of the
+    *inner* element, so the sum is `travel × height` vs the slack. (b) `<HeroMotion>`
+    pulls the whole hero up ~70px over the same scroll range, so travel must clearly
+    beat that or the two cancel and the photo just tracks the page, looking static.
+    First attempt netted 2px of apparent movement.
+15. **z-index needs a stacking context to be contained.** The slideshow stacks
+    slides with z-index; on desktop the parallax wrapper's `transform` created a
+    context by accident, but the reduced-motion / mobile branch was a plain div —
+    so the z-indexes escaped and the photo painted over the scrim AND the headline.
+    `isolate` on that wrapper is load-bearing, not decoration.
+16. **Translucent cards over changing backdrops.** The hero stat cards at 70%
+    opacity washed out to grey wherever the backdrop was light — and the carousel
+    changes the backdrop every 6.5s. Check any `bg-*/NN` surface against *both*
+    extremes it can sit on (bright sky, dark photo, light page), not just one.
 
 ---
 
@@ -200,7 +267,9 @@ NOTE: forms only capture values from REAL keyboard input (RHF ignores programmat
   `new PrismaClient()`). The `datasource` block has NO `url` — the URL comes from
   `prisma.config.ts` (CLI) and `src/lib/prisma.ts` (runtime), both off `DATABASE_URL`.
   Client singleton: `src/lib/prisma.ts`. Models: User, Job, Application,
-  WorkerRequest, ContactMessage, SiteContent. Seed: `pnpm db:seed` → admin user + jobs.
+  WorkerRequest, ContactMessage, SiteContent, TradeCategory, ReachCountry.
+  Seed: `pnpm db:seed` → admin user + jobs + trades + reach countries (each block
+  is skipped if its table already has rows, so it is safe to re-run).
 - **`src/generated/prisma` is gitignored**, so `prisma generate` MUST run on every
   install/build — wired as `postinstall` + prefixed onto `build` in package.json.
   Without it, Turbopack fails with `Can't resolve '@/generated/prisma/client'`.
@@ -214,7 +283,7 @@ NOTE: forms only capture values from REAL keyboard input (RHF ignores programmat
   Add or reset an admin with `pnpm db:create-admin <email> <password> [name]`
   (`scripts/create-admin.ts`, bcrypt cost 10, upserts by email).
 - **Admin UI = Ant Design v6** (native React 19). Setup: `@ant-design/nextjs-registry`
-  `AntdRegistry` + `AdminProviders` (ConfigProvider theme colorPrimary #1d4ed8 + antd
+  `AntdRegistry` + `AdminProviders` (ConfigProvider mapped onto the site tokens + antd
   `App`) in `app/admin/layout.tsx`. Responsive shell `components/admin/admin-shell.tsx`:
   antd `Layout` with fixed `Sider` on desktop, `Drawer` + hamburger on mobile
   (Grid.useBreakpoint, lg=992px). Pages are server components (prisma fetch) that pass
@@ -258,6 +327,43 @@ NOTE: forms only capture values from REAL keyboard input (RHF ignores programmat
   to DB (verified). CVs saved to `public/uploads/cv/` in dev (TODO: Cloudinary).
   Public `/jobs` reads published jobs from DB.
 
+**Phase 3 — CMS breadth, rebrand, hero rebuild:**
+- **Rebrand to the logo indigo.** `--accent` → `#302878` (light) / `#958de2` (dark),
+  plus `--accent-on-panel*`. Everything that hardcoded the old blue was repointed:
+  grid lines, aurora blobs, category hover shadow, and the four admin files feeding
+  AntD's `colorPrimary`. Navbar mark + favicon + apple-icon are now the logo swirl,
+  cropped from `logo.png` to `public/photos/logo-mark.png` (see §9).
+- **Hero rebuilt** as a full-bleed 3-slide carousel with parallax (see §6).
+  Photos in `public/photos/hero/skyline-{dubai,malaysia,saudi}.jpg`, 2800px,
+  Unsplash licence. Swapping one means re-checking its `lift` value in `hero.tsx`.
+- **Stats are partly live now.** `statCountries` = distinct countries on published
+  jobs; `statVacancies` = sum of their `vacancies` (replaced the unverifiable
+  "98% deployment rate"). Both are *defaults* — an admin value still overrides.
+  Only `statPlaced` remains invented. `settings.ts` holds the two counters.
+- **Two new CMS-managed sections**, both following the same shape as Jobs
+  (server page → plain DTOs → client AntD table → server actions → `revalidatePath("/","layout")`):
+  - **`TradeCategory` / `/admin/trades`** — the "What we provide" grid. Icons are an
+    **allowlist** (`trade-icons.ts`); the stored value is a string from the DB, so
+    mapping it straight onto an import would let a bad row crash the render.
+  - **`ReachCountry` / `/admin/reach`** — the map + legend. 47 supported countries.
+    Map coordinates live in `reach-map.ts`, NOT the DB (see §9). HQ pin is hardcoded.
+  Both fall back to the shipped hardcoded list when the table is empty or the query
+  fails — an empty section reads as a broken page.
+- **Applications can be deleted**, and the delete removes the CV file too. CVs are
+  served publicly from `public/uploads/cv/`, so deleting only the row would leave
+  someone's CV at a guessable URL. The path is guarded — it comes from stored data.
+- **Admin UI pass.** AntD tokens mapped onto the site's design system, sidebar in
+  `--panel` navy with the real logo, header shows the current page name, modals
+  `centered` + scrollable body (tall forms pushed their footer off-screen), and
+  navigation runs in `useTransition` with an indeterminate progress bar + a
+  `(panel)/loading.tsx` skeleton. Admin pages stay `force-dynamic` — that is
+  correct, they must never serve cached rows; the slowness was missing *feedback*.
+- **Locale switcher** is now `<Link>`-based so Next prefetches the other language
+  (it was a `<button>` + `router.replace`, so nothing was prefetched and the UI gave
+  no sign it had registered the click). Pending dot via `useLinkStatus`.
+- **`/[locale]/jobs` is SSG + `revalidate = 3600`** instead of `force-dynamic`; the
+  admin job actions already revalidate, so edits still appear immediately.
+
 **Env:** `.env` / `.env.local` (READ-LOCKED — tools cannot open them) hold
 `DATABASE_URL` (Neon **pooled** `-pooler` string) + `AUTH_SECRET`. Optional
 `DIRECT_URL` = the same string with `-pooler` removed; when set, the Prisma CLI and
@@ -272,13 +378,56 @@ Vercel → Project → Settings → Environment Variables.
    contact, social and the hero counters are done — add a row to `SETTING_FIELDS` for
    anything else that is a single string.
 3. Harden: rate-limit forms, admin user management UI, pagination on admin lists.
+4. **Real numbers from the client** — see the warning in §2. `statPlaced` and the
+   per-country worker counts on the reach map are invented and mutually
+   contradictory. Nothing in the schema can derive "workers placed": `Application`
+   only records people who applied *through this site*, and its statuses stop at
+   `shortlisted`. Either get figures the client will stand behind, or drop them.
+5. **Real contact details** — `phone`, `whatsapp` and `email` in `site-config.ts`
+   are still placeholders (`+880 0000 000000`). The floating WhatsApp button and
+   the contact page currently point at a number that does not exist.
+6. Delete for Worker Requests + Messages (Applications has it; the other two
+   inboxes still don't).
 
 **Pending credentials:** Cloudinary cloud name + API key/secret. (Neon is wired up —
-migration `*_init` applied to the `neondb` public schema and seeded.)
+migrations applied to the `neondb` public schema and seeded.)
 
 ---
 
-## 9. Conventions
+## 9. Generated assets — how to redo them
+
+**Logo mark / favicons.** `public/photos/logo.png` is the full company seal
+(transparent, 794×1123). The arched wordmark and licence line turn to mush below
+~120px, so small surfaces use only the four-figure swirl, cropped to
+`public/photos/logo-mark.png` (372×372). There is only ~15px of clearance between
+the swirl and the ring text — the crop was found by counting opaque pixels on
+square rings around the centre and taking the radius where that count hits zero
+(half-size 186 from centre 402,594). `src/app/icon.png` (256, transparent) and
+`apple-icon.png` (180, white field) are downscaled from the mark with **alpha
+premultiplied before averaging**, or transparent pixels drag colour into the
+edges and fringe it. The apple icon needs an opaque background because iOS
+ignores transparency — the swirl's counter would otherwise go black.
+
+**Map pin coordinates** (`reach-map.ts`). `public/images/world-dotted.svg` was
+generated by `dotted-map` with **`{ height: 52, grid: "diagonal", projection: { name: "mercator" } }`**
+— confirmed by regenerating candidates and matching both the viewBox and the
+2,292-dot count. To add a country, place it through the same library and read the
+position back rather than eyeballing:
+
+```js
+const m = new DottedMap({ height: 52, grid: "diagonal", projection: { name: "mercator" } });
+m.addPin({ lat, lng, svgOptions: { color: "#f0f", radius: 0.9 } });
+// find the r="0.9" circle in m.getSVG(...) → left = cx/103*100, top = cy/52*100
+```
+
+Two checks on anything added: `left` must stay under **99.5** (the map's
+easternmost dot — New Zealand computes to 102.4 and renders off-image), and
+small neighbours can snap to the same dot (Cyprus landed on Lebanon's, and is
+nudged). The method reproduces 5 of the original 8 pins exactly, worst case 1.6pp.
+
+---
+
+## 10. Conventions
 
 - Match existing component style; reuse `ui/` primitives (`Button`, `Container`,
   `SectionHeader`, `Reveal`, `Photo`).
