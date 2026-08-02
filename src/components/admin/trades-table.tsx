@@ -209,6 +209,8 @@ export function TradesTable({ trades }: { trades: TradeRow[] }) {
         onOk={submit}
         confirmLoading={saving}
         okText="Save"
+        centered
+        styles={{ body: { maxHeight: "calc(100vh - 220px)", overflowY: "auto", paddingRight: 8 } }}
         destroyOnHidden
       >
         <Form form={form} layout="vertical" style={{ marginTop: 16 }}>

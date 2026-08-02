@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
+import { useState, useTransition, type ReactNode } from "react";
 import { Layout, Menu, Grid, Drawer, Button, Dropdown, Avatar } from "antd";
 import {
   DashboardOutlined,
@@ -115,6 +115,7 @@ export function AdminShell({
   const screens = Grid.useBreakpoint();
   const isMobile = !screens.lg;
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [pending, startTransition] = useTransition();
   const pathname = usePathname();
   const router = useRouter();
 
@@ -123,9 +124,12 @@ export function AdminShell({
       .filter((i) => (i.key === "/admin" ? pathname === "/admin" : pathname.startsWith(i.key)))
       .sort((a, b) => b.key.length - a.key.length)[0]?.key ?? "/admin";
 
+  // Every admin page is force-dynamic (they must show live data), so each
+  // navigation is a server round-trip. Without a transition the UI sits
+  // completely still while that happens and the click feels ignored.
   const navigate = (key: string) => {
-    router.push(key);
     setDrawerOpen(false);
+    startTransition(() => router.push(key));
   };
 
   const userMenu = {
@@ -174,6 +178,7 @@ export function AdminShell({
       <Layout>
         <Header
           style={{
+            position: "relative",
             display: "flex",
             alignItems: "center",
             gap: 12,
@@ -203,11 +208,49 @@ export function AdminShell({
               )}
             </Button>
           </Dropdown>
+
+          {/* Indeterminate bar along the bottom edge of the header while a
+              navigation is in flight. Indeterminate because the server gives
+              no progress to report — it only has to prove the click landed. */}
+          <div
+            aria-hidden
+            style={{
+              position: "absolute",
+              left: 0,
+              right: 0,
+              bottom: -1,
+              height: 2,
+              overflow: "hidden",
+              opacity: pending ? 1 : 0,
+              transition: "opacity 150ms",
+              pointerEvents: "none",
+            }}
+          >
+            <div
+              style={{
+                height: "100%",
+                width: "40%",
+                background: "#302878",
+                animation: "admin-progress 1.1s ease-in-out infinite",
+              }}
+            />
+          </div>
         </Header>
         {/* Background comes from the theme's colorBgLayout rather than being
             hardcoded, so it stays in step with the token set. */}
+        {/* Dim the outgoing page while the next one loads, so a slow route
+            reads as "working" rather than "frozen". */}
         <Content style={{ padding: isMobile ? 16 : 28 }}>
-          <div style={{ maxWidth: 1140, margin: "0 auto" }}>{children}</div>
+          <div
+            style={{
+              maxWidth: 1140,
+              margin: "0 auto",
+              opacity: pending ? 0.55 : 1,
+              transition: "opacity 150ms",
+            }}
+          >
+            {children}
+          </div>
         </Content>
       </Layout>
     </Layout>

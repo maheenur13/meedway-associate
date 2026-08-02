@@ -171,6 +171,8 @@ export function JobsTable({ jobs }: { jobs: JobRow[] }) {
         confirmLoading={saving}
         okText={editingId ? "Save changes" : "Create job"}
         width={640}
+        centered
+        styles={{ body: { maxHeight: "calc(100vh - 220px)", overflowY: "auto", paddingRight: 8 } }}
         destroyOnHidden
       >
         <Form form={form} layout="vertical" style={{ marginTop: 12 }}>

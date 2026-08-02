@@ -222,3 +222,15 @@ html[lang="bn"] body {
     animation: none !important;
   }
 }
+
+/* Admin: indeterminate navigation bar (see components/admin/admin-shell.tsx).
+   Lives here rather than in the component because the admin layout imports
+   this stylesheet and inline styles can't declare keyframes. */
+@keyframes admin-progress {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(250%);
+  }
+}
