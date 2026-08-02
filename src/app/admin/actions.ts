@@ -1,6 +1,8 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { unlink } from "fs/promises";
+import path from "path";
 import { signOut } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { SETTING_KEYS } from "@/lib/settings-fields";
@@ -195,6 +197,43 @@ export async function updateStatus(
     await prisma.contactMessage.update({ where: { id }, data: { status } });
     revalidatePath("/admin/messages");
   }
+  return { ok: true };
+}
+
+/**
+ * Deletes an application and the CV file that came with it.
+ *
+ * Uploaded CVs live under public/uploads/cv, which is publicly served — so
+ * removing only the database row would leave someone's CV downloadable at a
+ * guessable URL. That is worse than not deleting at all, particularly since
+ * applications hold name, phone, address and the CV itself.
+ */
+export async function removeApplication(id: string) {
+  const row = await prisma.application.findUnique({
+    where: { id },
+    select: { cvPath: true },
+  });
+
+  await prisma.application.delete({ where: { id } });
+
+  if (row?.cvPath) {
+    const uploads = path.join(process.cwd(), "public", "uploads", "cv");
+    const target = path.resolve(
+      process.cwd(),
+      "public",
+      row.cvPath.replace(/^[/\\]+/, "")
+    );
+    // Only ever unlink inside the CV folder — cvPath is stored data, and a
+    // crafted value must not be able to reach the rest of the filesystem.
+    if (target.startsWith(uploads + path.sep)) {
+      await unlink(target).catch(() => {
+        // Already gone, or the deploy has an ephemeral filesystem. The row is
+        // deleted either way; don't fail the action over the file.
+      });
+    }
+  }
+
+  revalidatePath("/admin/applications");
   return { ok: true };
 }
 

@@ -1,9 +1,9 @@
 "use client";
 
-import { App, Card, Select, Table, Typography } from "antd";
-import { DownloadOutlined } from "@ant-design/icons";
+import { App, Button, Card, Popconfirm, Select, Table, Typography } from "antd";
+import { DownloadOutlined, DeleteOutlined } from "@ant-design/icons";
 import { useRouter } from "next/navigation";
-import { updateStatus } from "@/app/admin/actions";
+import { updateStatus, removeApplication } from "@/app/admin/actions";
 import { PageHeader } from "./page-header";
 
 export type AppRow = {
@@ -27,6 +27,12 @@ export function ApplicationsTable({ rows }: { rows: AppRow[] }) {
   async function change(id: string, status: string) {
     await updateStatus("application", id, status);
     message.success("Status updated");
+    router.refresh();
+  }
+
+  async function onDelete(id: string) {
+    await removeApplication(id);
+    message.success("Application deleted");
     router.refresh();
   }
 
@@ -89,6 +95,32 @@ export function ApplicationsTable({ rows }: { rows: AppRow[] }) {
             dataIndex: "createdAt",
             align: "right",
             render: (v: string) => new Date(v).toLocaleDateString("en-GB"),
+          },
+          {
+            title: "",
+            key: "actions",
+            align: "right",
+            width: 60,
+            render: (_, r) => (
+              <Popconfirm
+                title="Delete this application?"
+                description={
+                  r.cvPath
+                    ? "The applicant's details and their uploaded CV are removed permanently."
+                    : "The applicant's details are removed permanently."
+                }
+                okText="Delete"
+                okButtonProps={{ danger: true }}
+                onConfirm={() => onDelete(r.id)}
+              >
+                <Button
+                  size="small"
+                  danger
+                  icon={<DeleteOutlined />}
+                  aria-label={`Delete application from ${r.fullName}`}
+                />
+              </Popconfirm>
+            ),
           },
         ]}
       />
